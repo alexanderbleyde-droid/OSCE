@@ -1,0 +1,378 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V3 Test Plan · Plexus OSCE V3</title><style>
+:root{
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  --brand-teal:#14B8A6;--brand-teal-bright:#2DD4BF;--brand-teal-deep:#0D9488;
+  --brand-blue:#3B82F6;--brand-gold:#D4A574;--brand-navy:#062247;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:20px;--r-2xl:28px;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+[data-theme="dark"]{
+  --bg-base:#060B14;--bg-grad-1:#0B1A2E;--bg-grad-2:#0A1322;
+  --glass-1:rgba(255,255,255,0.03);--glass-2:rgba(255,255,255,0.05);--glass-3:rgba(255,255,255,0.08);
+  --border-subtle:rgba(255,255,255,0.06);--border-default:rgba(255,255,255,0.10);--border-strong:rgba(255,255,255,0.16);
+  --text-primary:rgba(248,250,252,0.96);--text-secondary:rgba(203,213,225,0.74);--text-tertiary:rgba(148,163,184,0.55);
+  --success:#34D399;--success-bg:rgba(52,211,153,0.10);--success-border:rgba(52,211,153,0.3);
+  --warning:#FBBF24;--warning-bg:rgba(251,191,36,0.10);--warning-border:rgba(251,191,36,0.3);
+  --danger:#F87171;--danger-bg:rgba(248,113,113,0.10);--danger-border:rgba(248,113,113,0.3);
+  --code-bg:rgba(255,255,255,0.05);--shadow-lg:0 12px 40px rgba(0,0,0,0.5);
+  --logo:url("../assets/plexus-white.png");
+}
+[data-theme="light"]{
+  --bg-base:#F1F5F9;--bg-grad-1:#E0EAF5;--bg-grad-2:#EDF2F8;
+  --glass-1:rgba(255,255,255,0.6);--glass-2:rgba(255,255,255,0.75);--glass-3:rgba(255,255,255,0.9);
+  --border-subtle:rgba(15,23,42,0.06);--border-default:rgba(15,23,42,0.10);--border-strong:rgba(15,23,42,0.16);
+  --text-primary:#0F172A;--text-secondary:#475569;--text-tertiary:#94A3B8;
+  --success:#0D9488;--success-bg:rgba(13,148,136,0.08);--success-border:rgba(13,148,136,0.3);
+  --warning:#B45309;--warning-bg:rgba(180,83,9,0.08);--warning-border:rgba(180,83,9,0.3);
+  --danger:#DC2626;--danger-bg:rgba(220,38,38,0.07);--danger-border:rgba(220,38,38,0.3);
+  --code-bg:rgba(15,23,42,0.05);--shadow-lg:0 12px 40px rgba(15,23,42,0.10);
+  --logo:url("../assets/plexus-blue.png");
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:var(--font-sans);background:
+  radial-gradient(1200px 800px at 80% -10%,var(--bg-grad-1),transparent 60%),
+  radial-gradient(1000px 700px at -10% 10%,var(--bg-grad-2),transparent 55%),
+  var(--bg-base);
+  color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--brand-teal-bright);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:20px;
+  padding:14px 28px;background:var(--glass-2);backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--border-default)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600;color:var(--text-primary)}
+.brand:hover{text-decoration:none}
+.brand-logo{width:104px;height:26px;background:var(--logo) no-repeat left center;background-size:contain}
+.brand-tag{font-size:11px;font-family:var(--font-mono);letter-spacing:.08em;color:var(--brand-teal-bright);
+  border:1px solid var(--brand-teal-deep);padding:2px 8px;border-radius:var(--r-full,9999px);border-radius:999px}
+.topnav{display:flex;gap:6px;margin-left:8px}
+.topnav a{color:var(--text-secondary);padding:7px 13px;border-radius:var(--r-md);font-size:14px;font-weight:500}
+.topnav a:hover{color:var(--text-primary);background:var(--glass-2);text-decoration:none}
+.topnav a.active{color:var(--brand-teal-bright);background:var(--glass-2)}
+.spacer{flex:1}
+.theme-toggle{background:var(--glass-2);border:1px solid var(--border-default);color:var(--text-secondary);
+  width:38px;height:38px;border-radius:var(--r-md);cursor:pointer;font-size:16px;display:grid;place-items:center}
+.theme-toggle:hover{color:var(--text-primary);border-color:var(--border-strong)}
+
+.layout{display:grid;grid-template-columns:300px 1fr;gap:0;max-width:1280px;margin:0 auto;align-items:start}
+.sidebar{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px);overflow-y:auto;
+  padding:28px 18px 60px;border-right:1px solid var(--border-subtle)}
+.side-h{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-tertiary);
+  margin:18px 8px 8px;font-weight:600}
+.doc-switch a{display:block;color:var(--text-secondary);padding:8px 10px;border-radius:var(--r-md);
+  font-size:13.5px;font-weight:500}
+.doc-switch a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.doc-switch a.cur{background:var(--glass-3);color:var(--brand-teal-bright)}
+.toc{margin-top:6px}
+.toc ul{list-style:none;padding-left:0}
+.toc>ul>li>a{font-weight:600}
+.toc li{margin:1px 0}
+.toc a{display:block;color:var(--text-secondary);padding:5px 10px;border-radius:8px;font-size:13px;
+  border-left:2px solid transparent}
+.toc a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.toc ul ul a{padding-left:22px;font-size:12.5px;color:var(--text-tertiary)}
+.content{padding:40px 56px 120px;max-width:860px;min-width:0}
+.content h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;margin:6px 0 6px}
+.content h2{font-size:21px;font-weight:650;margin:38px 0 12px;padding-top:14px;border-top:1px solid var(--border-subtle)}
+.content h3{font-size:16.5px;font-weight:600;margin:26px 0 8px;color:var(--text-primary)}
+.content h4{font-size:14px;font-weight:600;margin:18px 0 6px;color:var(--text-secondary)}
+.content p,.content li{color:var(--text-secondary);font-size:15px}
+.content strong{color:var(--text-primary);font-weight:650}
+.content ul,.content ol{padding-left:24px;margin:10px 0}
+.content li{margin:5px 0}
+.content blockquote{border-left:3px solid var(--brand-teal-deep);background:var(--glass-1);
+  padding:12px 18px;border-radius:0 var(--r-md) var(--r-md) 0;margin:16px 0;color:var(--text-secondary)}
+.content blockquote strong{color:var(--brand-teal-bright)}
+.content code{font-family:var(--font-mono);font-size:12.5px;background:var(--code-bg);
+  padding:2px 6px;border-radius:6px;color:var(--text-primary)}
+.content pre{background:var(--code-bg);border:1px solid var(--border-subtle);border-radius:var(--r-md);
+  padding:16px;overflow:auto;margin:14px 0}
+.content pre code{background:none;padding:0;font-size:12.5px;color:var(--text-secondary)}
+.content table{border-collapse:collapse;width:100%;margin:16px 0;font-size:13.5px;display:block;overflow-x:auto}
+.content th{text-align:left;background:var(--glass-2);color:var(--text-primary);font-weight:600;
+  padding:9px 12px;border:1px solid var(--border-default);white-space:nowrap}
+.content td{padding:9px 12px;border:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top}
+.content h2 a.toclink,.content h3 a.toclink,.content h1 a.toclink{opacity:0;color:var(--text-tertiary);
+  margin-left:8px;font-weight:400;text-decoration:none}
+.content h2:hover a.toclink,.content h3:hover a.toclink{opacity:1}
+.content li.task{list-style:none;margin-left:-18px;display:flex;gap:9px;align-items:flex-start}
+.content li.task .box{flex:0 0 16px;width:16px;height:16px;border:1.5px solid var(--border-strong);
+  border-radius:5px;margin-top:3px}
+.content li.task.done .box{background:var(--success);border-color:var(--success);position:relative}
+.content li.task.done .box::after{content:"✓";position:absolute;inset:0;color:#04221b;font-size:12px;
+  display:grid;place-items:center;font-weight:700}
+.doc-hero-shot{margin:18px 0 26px;border:1px solid var(--border-default);border-radius:var(--r-lg);
+  overflow:hidden;box-shadow:var(--shadow-lg);background:var(--glass-1)}
+.doc-hero-shot img{display:block;width:100%}
+.doc-hero-shot .cap{padding:9px 14px;font-size:12px;color:var(--text-tertiary);border-top:1px solid var(--border-subtle);
+  display:flex;justify-content:space-between;align-items:center}
+@media(max-width:920px){.layout{grid-template-columns:1fr}.sidebar{display:none}.content{padding:28px 22px 90px}}
+/*OSCE-TOPBAR-V2*/
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand-logo,.brand-tag{display:none!important}
+.brand-mark{width:32px;height:32px;flex:none;display:block;filter:drop-shadow(0 3px 9px rgba(13,148,136,.4))}
+.brand-mark svg{width:100%;height:100%;display:block}
+.brand-name{display:flex;flex-direction:column;line-height:1.06}
+.brand-name-main{font-family:var(--font-sans);font-size:16px;font-weight:650;letter-spacing:-.012em;color:var(--text-primary)}
+.brand-name-sub{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.16em;color:var(--brand-teal-bright)}
+.topnav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:3px}
+.topnav>a,.topnav .parent{color:var(--text-secondary);padding:8px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:5px;text-decoration:none;cursor:pointer;transition:color .15s,background .15s;white-space:nowrap}
+.topnav>a:hover,.topnav .parent:hover{color:var(--text-primary);background:var(--glass-2);text-decoration:none}
+.topnav>a.active{color:var(--brand-teal-bright);background:var(--glass-2)}
+.topnav .item{position:relative}
+.topnav .item.active>.parent{color:var(--brand-teal-bright);background:var(--glass-2)}
+.topnav .caret{width:11px;height:11px;opacity:.55;transition:transform .2s}
+.topnav .item:hover .caret{transform:rotate(180deg)}
+.topnav .item::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
+.submenu{position:absolute;top:calc(100% + 9px);left:0;min-width:228px;background:var(--glass-3);
+ backdrop-filter:blur(26px) saturate(150%);-webkit-backdrop-filter:blur(26px) saturate(150%);
+ border:1px solid var(--border-default);border-radius:var(--r-lg);
+ box-shadow:0 20px 52px -14px rgba(0,0,0,.5),0 6px 16px -8px rgba(0,0,0,.32);
+ padding:7px;display:flex;flex-direction:column;gap:1px;z-index:80;
+ opacity:0;visibility:hidden;transform:translateY(-7px);transition:opacity .18s,transform .18s,visibility .18s}
+.topnav .item:hover .submenu{opacity:1;visibility:visible;transform:translateY(0)}
+.submenu a{padding:8px 11px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);
+ white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:18px;text-decoration:none}
+.submenu a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.submenu .meta{font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary);letter-spacing:.03em}
+.submenu .sub-label{padding:7px 11px 3px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--text-tertiary)}
+.submenu .sub-div{height:1px;background:var(--border-subtle);margin:6px 5px}
+@media(max-width:1040px){.topnav>a,.topnav .parent{padding:8px 9px;font-size:13.5px}}
+@media(max-width:880px){.topnav{display:none}}
+</style></head><body><div class="topbar"><a class="brand" href="../index.html"><span class="brand-mark"><svg viewBox="0 0 488 488" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="pg" x1="0" y1="0" x2="488" y2="488" gradientUnits="userSpaceOnUse"><stop stop-color="#2DD4BF"/><stop offset="1" stop-color="#0D9488"/></linearGradient></defs><g fill="url(#pg)"><path transform="translate(443.0,42.7)" d="M0.0 0.0 C24.6 23.7 40.0 56.5 41.2 90.8 C41.6 132.3 26.7 164.7 -1.2 194.9 C-32.1 223.5 -68.7 232.5 -109.8 232.4 C-111.9 232.4 -114.0 232.4 -116.2 232.4 C-120.7 232.4 -125.2 232.3 -129.7 232.3 C-136.9 232.3 -144.1 232.3 -151.2 232.3 C-171.6 232.3 -191.9 232.2 -212.3 232.2 C-224.8 232.2 -237.2 232.1 -249.7 232.1 C-254.4 232.1 -259.2 232.1 -263.9 232.1 C-270.6 232.1 -277.2 232.1 -283.8 232.1 C-285.8 232.1 -287.8 232.1 -289.8 232.1 C-314.7 232.1 -335.7 237.3 -354.0 255.3 C-370.2 273.9 -375.4 294.1 -374.0 318.3 C-369.6 341.0 -358.0 358.4 -338.9 371.4 C-326.9 378.1 -315.2 381.4 -301.5 381.5 C-299.6 381.5 -297.6 381.5 -295.7 381.6 C-293.6 381.6 -291.5 381.6 -289.4 381.6 C-288.3 381.6 -288.3 381.6 -283.0 381.7 C-276.2 381.7 -269.4 381.8 -262.6 381.9 C-258.0 381.9 -253.4 381.9 -248.8 382.0 C-237.5 382.1 -226.2 382.2 -215.0 382.3 C-215.0 385.3 -215.0 385.3 -219.0 390.3 C-219.6 390.3 -220.3 390.3 -221.0 390.3 C-221.6 391.6 -222.3 392.9 -223.0 394.3 C-224.2 395.8 -225.5 397.3 -226.8 398.9 C-236.8 410.9 -244.7 424.2 -252.1 437.9 C-254.0 441.3 -254.0 441.3 -255.0 442.3 C-263.3 442.6 -271.6 442.5 -279.9 442.5 C-281.1 442.5 -281.1 442.5 -287.0 442.5 C-326.5 442.5 -361.5 434.1 -391.0 406.3 C-392.9 404.6 -394.9 403.0 -397.0 401.3 C-423.0 373.7 -436.0 338.0 -435.0 300.3 C-432.1 262.8 -416.0 231.8 -389.2 205.7 C-364.2 184.8 -334.3 172.2 -301.4 172.2 C-299.5 172.1 -297.6 172.1 -295.7 172.1 C-293.6 172.1 -291.5 172.1 -289.4 172.1 C-287.2 172.1 -285.1 172.1 -282.8 172.1 C-278.1 172.1 -273.3 172.1 -268.6 172.1 C-261.1 172.1 -253.6 172.1 -246.1 172.0 C-224.8 172.0 -203.4 171.9 -182.1 171.9 C-169.0 171.9 -156.0 171.8 -142.9 171.8 C-138.0 171.8 -133.0 171.8 -128.0 171.8 C-121.1 171.8 -114.1 171.7 -107.2 171.7 C-106.1 171.7 -106.1 171.7 -101.0 171.7 C-76.0 171.6 -56.3 165.1 -38.0 147.3 C-34.7 143.3 -34.7 143.3 -32.0 139.3 C-31.1 138.2 -30.3 137.0 -29.5 135.9 C-19.2 117.1 -17.2 97.4 -21.6 76.7 C-28.9 54.1 -42.1 39.3 -63.0 28.3 C-81.2 21.5 -102.7 20.1 -120.8 28.0 C-140.0 37.0 -153.4 49.8 -162.0 69.3 C-167.3 85.4 -167.0 101.9 -167.0 118.7 C-167.0 120.9 -167.0 123.1 -167.0 125.3 C-168.0 126.3 -168.0 126.3 -173.5 126.4 C-176.0 126.4 -178.4 126.4 -181.0 126.4 C-181.6 126.4 -181.6 126.4 -184.9 126.4 C-189.1 126.4 -193.3 126.4 -197.5 126.4 C-200.4 126.3 -203.2 126.3 -206.0 126.3 C-213.0 126.3 -220.0 126.3 -227.0 126.3 C-227.0 120.3 -227.1 114.3 -227.1 108.4 C-227.1 106.7 -227.1 105.0 -227.1 103.3 C-227.3 63.7 -215.0 29.9 -187.3 1.3 C-134.8 -50.2 -53.4 -48.8 0.0 0.0 Z "/><path transform="translate(350.0,121.0)" d="M0.0 0.0 C5.2 3.1 7.5 4.8 8.9 10.8 C9.0 16.0 7.9 18.6 5.0 23.0 C-1.7 27.5 -4.2 27.7 -12.0 27.0 C-18.0 23.0 -18.0 23.0 -21.0 16.0 C-20.5 10.1 -19.7 7.7 -15.5 3.5 C-10.0 -0.4 -6.8 -0.3 0.0 0.0 Z "/></g></svg></span><span class="brand-name"><span class="brand-name-main">Plexus</span><span class="brand-name-sub">OSCE · V3</span></span></a><nav class="topnav"><a href="../index.html" class="">Home</a><a href="../system.html" class="">Explore</a><div class="item"><a href="../system.html#screens" class="parent">Screens <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><div class="sub-label">Candidate</div><a href="../osce-screen-01-exam-chat.html">Exam encounter</a><a href="../osce-screen-02-station-report.html">Station report</a><a href="../osce-screen-knowledge-bridge.html">Knowledge Bridge</a><a href="../osce-screen-03-dashboard.html">Dashboard</a><a href="../osce-screen-05-profile.html">Profile</a><a href="../osce-screen-04-signin.html">Sign in</a><div class="sub-div"></div><div class="sub-label">Admin</div><a href="../osce-screen-06-admin-overview.html">Overview</a><a href="../osce-screen-07-admin-tokens.html">Token controls</a><a href="../osce-screen-08-admin-users-specs.html">Users &amp; specialties</a><a href="../osce-screen-09-system-settings.html">System settings</a><a href="../osce-screen-10-audit-log.html">Audit log</a><div class="sub-div"></div><a href="../osce-design-system-v1.html">Design system</a></div></div><div class="item"><a href="../system.html#stations" class="parent">Stations <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><a href="../docs/station-itb.html">ITB Pump <span class="meta">PMR-002</span></a><a href="../docs/station-as.html">Ankylosing Spondylitis <span class="meta">PLX-PMR-AS-001</span></a></div></div><div class="item active"><a href="../docs/index.html" class="parent">Documentation <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><a href="../docs/index.html">Documentation hub</a><a href="../docs/requirements-map.html">Requirements map</a><a href="../docs/blueprint.html">Master Blueprint</a><a href="../docs/compliance.html">Station Compliance</a><a href="../docs/test-plan.html">Test Plan</a><a href="../docs/implementation.html">Implementation Plan</a><a href="../docs/brd-gap.html">BRD Gap Analysis</a></div></div><a href="../docs/requirements-map.html" class="">Requirements</a></nav><div class="spacer"></div><button class="theme-toggle" onclick="toggleTheme()">☀</button></div><div class="layout"><aside class="sidebar"><div class="side-h">Station templates</div><div class="doc-switch"><a class="" href="station-itb.html">ITB Pump — Counseling station</a><a class="" href="station-as.html">Ankylosing Spondylitis — Master station</a></div><div class="side-h">Specifications</div><div class="doc-switch"><a class="" href="blueprint.html">Master Station Blueprint</a><a class="" href="compliance.html">Station Compliance</a><a class="cur" href="test-plan.html">V3 Test Plan</a><a class="" href="implementation.html">Implementation Plan</a><a class="" href="brd-gap.html">BRD Gap Analysis</a></div><div class="side-h">On this page</div><div class="toc"><div class="toc">
+<ul>
+<li><a href="#a-difficulty-concealment-the-ai-dial">A. Difficulty &amp; concealment — the AI Dial</a></li>
+<li><a href="#b-progressive-controlled-disclosure">B. Progressive (controlled) disclosure</a></li>
+<li><a href="#c-randomised-patient-question-pool">C. Randomised patient-question pool</a></li>
+<li><a href="#d-jargon-detection-communication-layer">D. Jargon detection &amp; communication layer</a></li>
+<li><a href="#e-closing-protocol-teach-back">E. Closing protocol &amp; teach-back</a></li>
+<li><a href="#f-exam-mode-vs-tutor-mode">F. Exam mode vs Tutor mode</a></li>
+<li><a href="#g-knowledge-bridge-remediation-engine">G. Knowledge Bridge — remediation engine</a></li>
+<li><a href="#h-scoring-integrity-per-station-domains">H. Scoring integrity (per-station domains)</a></li>
+<li><a href="#i-cross-cutting">I. Cross-cutting</a></li>
+<li><a href="#j-per-station-end-to-end-smoke-runs">J. Per-station end-to-end smoke runs</a></li>
+<li><a href="#test-log-template">Test log template</a></li>
+</ul>
+</div>
+</div></aside><main class="content"><a class="doc-hero-shot" href="../osce-screen-01-exam-chat.html" title="Open the live screen"><img src="../assets/shots/screen-01.png" alt="Exam chat (Screen 01)"><div class="cap"><span>Related screen — Exam chat (Screen 01)</span><span>open live ↗</span></div></a><h1 id="plexus-osce-simulator-v3-test-plan">Plexus OSCE Simulator — V3 Test Plan<a class="headerlink" href="#plexus-osce-simulator-v3-test-plan" title="Permanent link">#</a></h1>
+<p><strong>Scope:</strong> acceptance tests for the V3 design (the station engine). Tests are derived from <code>MASTER_STATION_BLUEPRINT.md</code> and the two reference stations (<code>PMR-002</code> ITB pump, <code>PLX-PMR-AS-001</code> Ankylosing Spondylitis).</p>
+<p><strong>How to read a test.</strong> Each test has an ID, a <strong>verification surface</strong>, preconditions, numbered steps, and an expected result. Run a test by following the steps exactly and comparing to <em>Expected</em>. Record Pass / Fail / Blocked and a note.</p>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>[P]</strong></td>
+<td>Verifiable in the clickable prototype — a screen demonstrates the behaviour.</td>
+</tr>
+<tr>
+<td><strong>[E]</strong></td>
+<td>Engine-acceptance test — must be exercised against the built system; the prototype only illustrates it.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Current prototype status (read first).</strong> As of this revision the V3 screens still mirror the V2 baseline; only the scaffold, the Master Station Blueprint, and the launcher have been rebuilt for V3. The <strong>Station Report</strong> (Screen 02, renamed from "Knowledge Bridge") and the new <strong>Knowledge Bridge</strong> remediation-engine screen are now built; remaining <strong>[P]</strong> tests against the exam-chat overhaul and the station-authoring screen are <em>Blocked — pending screen build</em> and are marked accordingly. They are written now so the screens can be checked against them as they land.</p>
+</blockquote>
+<hr />
+<h2 id="a-difficulty-concealment-the-ai-dial">A. Difficulty &amp; concealment — the AI Dial<a class="headerlink" href="#a-difficulty-concealment-the-ai-dial" title="Permanent link">#</a></h2>
+<p><strong>T-AID-01 — Clinical facts are tier-invariant</strong> · [E]
+Preconditions: ITB station authored; Exam mode.
+1. Run the station at <strong>Basic</strong>, transcribe every clinical fact the simulated patient (SP) states.
+2. Re-run at <strong>Intermediate</strong>, then <strong>Advanced</strong>, with comparable candidate input.
+3. Diff the clinical facts stated across the three runs.
+<em>Expected:</em> clinical facts, doses, and safety statements are identical across tiers. Only the task prompt, SP affect, and cue explicitness differ. No fact appears in one tier and not another.</p>
+<p><strong>T-AID-02 — Concealed task is genuinely hidden</strong> · [E] / [P pending]
+Preconditions: AS station, <strong>Advanced</strong> tier, Exam mode.
+1. Enter the station; read the candidate prompt.
+2. Confirm the prompt is the minimal "take a focused history and answer the patient's questions."
+3. Confirm the concealed construct (bad news + counselling required) is <strong>not</strong> shown anywhere in the candidate-facing UI.
+<em>Expected:</em> construct is hidden in Exam mode; the construct-recognition rubric item exists but is invisible to the candidate; it is scored only on concealed tiers.</p>
+<p><strong>T-AID-03 — Per-tier raw totals normalise</strong> · [E]
+1. Score an AS <strong>Senior/Advanced</strong> run (max 42) and an AS <strong>Basic</strong> run (max 40, construct item omitted).
+2. Read the percentage on each result.
+<em>Expected:</em> both report on the same 0–100% wheel; the differing raw maxima do not distort comparability; the construct item is absent from the Basic total.</p>
+<p><strong>T-AID-04 — Affect scales with tier</strong> · [E]
+1. Trigger the same bad-news moment at Basic, Intermediate, Advanced.
+<em>Expected:</em> Basic SP accepts calmly; Intermediate is mildly anxious; Advanced shows denial/anger/tears and resists — without any change to the underlying facts or rubric.</p>
+<hr />
+<h2 id="b-progressive-controlled-disclosure">B. Progressive (controlled) disclosure<a class="headerlink" href="#b-progressive-controlled-disclosure" title="Permanent link">#</a></h2>
+<p><strong>T-DISC-01 — Withheld fact stays locked until elicited</strong> · [E]
+Preconditions: ITB station.
+1. Run the station to completion <strong>without</strong> asking about the patient's concerns or fears.
+2. Confirm the "read online that a patient died from pump failure" fear is never volunteered.
+3. Re-run; ask an open question about concerns/fears.
+<em>Expected:</em> the fear is withheld in run 1 and released only after the matching elicitation in run 2.</p>
+<p><strong>T-DISC-02 — Disclosure granularity matches question specificity</strong> · [E]
+1. Ask a <strong>broad</strong> history question; observe the SP gives one relevant detail, not a data-dump.
+2. Ask a <strong>targeted</strong> question about a single attribute; observe only that attribute is disclosed.
+<em>Expected:</em> salient facts are not over-disclosed; the SP answers at the granularity asked (the V3 controlled-disclosure rule).</p>
+<p><strong>T-DISC-03 — Sensitive concern requires sensitive elicitation</strong> · [E]
+Preconditions: AS, Advanced.
+1. Probe the patient's identity/loss concern bluntly.
+2. Re-run and explore it sensitively.
+<em>Expected:</em> the hidden identity/loss concern emerges only when explored well, per the AI Dial.</p>
+<hr />
+<h2 id="c-randomised-patient-question-pool">C. Randomised patient-question pool<a class="headerlink" href="#c-randomised-patient-question-pool" title="Permanent link">#</a></h2>
+<p><strong>T-POOL-01 — Category floors honoured</strong> · [E]
+1. Start 20 fresh ITB sessions; for each, log the questions drawn.
+<em>Expected:</em> every session draws 2–3 questions and always includes ≥1 Safety and ≥1 Lifestyle question; the remaining 0–1 is from any category.</p>
+<p><strong>T-POOL-02 — Trigger types</strong> · [E]
+1. Identify a <code>SPONTANEOUS</code> question and an <code>ON INVITE</code> question.
+2. Run a session without ever inviting questions.
+<em>Expected:</em> the SPONTANEOUS question fires at its defined point; the ON INVITE question does not fire unless the candidate asks "any other questions?".</p>
+<p><strong>T-POOL-03 — Check-in scored</strong> · [E]
+1. Answer a drawn question and <strong>omit</strong> the comprehension check-in.
+2. Re-run and include "does that answer your question?".
+<em>Expected:</em> the check-in item scores 0 in run 1, full in run 2.</p>
+<hr />
+<h2 id="d-jargon-detection-communication-layer">D. Jargon detection &amp; communication layer<a class="headerlink" href="#d-jargon-detection-communication-layer" title="Permanent link">#</a></h2>
+<p><strong>T-JARG-01 — First flag, no penalty</strong> · [E]
+1. Use a flagged term (e.g. "intrathecal") with no same-sentence lay translation.
+<em>Expected:</em> SP reacts in character with confusion; no deduction yet; candidate gets a chance to self-correct.</p>
+<p><strong>T-JARG-02 — Escalation curve</strong> · [E]
+1. Use 2 unexplained flagged terms → check SP mild frustration + minor comm deduction.
+2. 3 terms → visible disengagement + moderate deduction + comm score capped.
+3. 4+ terms → SP stops engaging; teach-back is set to fail; comm cannot recover.
+<em>Expected:</em> behaviour and scoring match the 1/2/3/4+ table for this station.</p>
+<p><strong>T-JARG-03 — Self-correction resets; same-turn new flag does not</strong> · [E]
+1. Use a flag, then self-correct after the SP prompt → counter resets, no deduction.
+2. Self-correct one term but introduce a <em>new</em> flagged term in the same turn.
+<em>Expected:</em> run 1 resets to 0; run 2 does <strong>not</strong> reset.</p>
+<p><strong>T-JARG-04 — Morphological + case-insensitive matching</strong> · [E]
+1. Use "titrating" and "Titrated" (flag is "titrate").
+2. Use "Intrathecal" capitalised.
+<em>Expected:</em> all variants flag; matching is case-insensitive and morphology-aware.</p>
+<p><strong>T-JARG-05 — Acceptable use does not flag</strong> · [E]
+1. Say "…delivered into the fluid around your spinal cord — what we call intrathecal."
+<em>Expected:</em> no flag (term + same-sentence plain-language translation is acceptable).</p>
+<p><strong>T-JARG-06 — Prototype shows the counter</strong> · [P pending]
+1. Open exam-chat (01); reproduce a jargon flag.
+<em>Expected:</em> the flag reaction and an escalating counter are visible in the prototype. <em>(Blocked — pending screen 01 build.)</em></p>
+<hr />
+<h2 id="e-closing-protocol-teach-back">E. Closing protocol &amp; teach-back<a class="headerlink" href="#e-closing-protocol-teach-back" title="Permanent link">#</a></h2>
+<p><strong>T-CLOSE-01 — No teach-back is a silent critical fail</strong> · [E]
+1. Close the station without asking the patient to summarise.
+<em>Expected:</em> the SP does <strong>not</strong> prompt for teach-back; the station records a critical fail (teach-back is a critical safety item).</p>
+<p><strong>T-CLOSE-02 — Missing brochure/contact prompts the SP</strong> · [E]
+1. Attempt to close without offering written material / contact number.
+<em>Expected:</em> the SP asks spontaneously ("will you give me anything written?" / "how do I reach you?").</p>
+<p><strong>T-CLOSE-03 — Teach-back is evaluated, not assumed</strong> · [E]
+1. Ask for a teach-back; have the SP return an incorrect summary.
+<em>Expected:</em> the engine evaluates the SP's generated summary and only credits the item if the candidate actually elicited correct understanding.</p>
+<hr />
+<h2 id="f-exam-mode-vs-tutor-mode">F. Exam mode vs Tutor mode<a class="headerlink" href="#f-exam-mode-vs-tutor-mode" title="Permanent link">#</a></h2>
+<p><strong>T-MODE-01 — Exam mode reveals nothing</strong> · [E]
+1. Stall mid-encounter in Exam mode.
+<em>Expected:</em> no coaching, no hints, no construct reveal; assessment is silent.</p>
+<p><strong>T-MODE-02 — Tutor nudges only at natural pauses</strong> · [E]
+1. In Tutor mode, pause after finishing a phase → expect a Socratic nudge.
+2. Pause mid-sentence → expect <strong>no</strong> interruption.
+<em>Expected:</em> nudges fire only at natural pauses, never mid-sentence, and never give the answer outright.</p>
+<p><strong>T-MODE-03 — Tutor post-feedback is directive</strong> · [E]
+1. Finish a Tutor run that missed the construct.
+<em>Expected:</em> feedback reveals the concealed construct, maps performance to specific rubric items, names any bridge fired, and gives one or two concrete improvements (not an exhaustive list).</p>
+<hr />
+<h2 id="g-knowledge-bridge-remediation-engine">G. Knowledge Bridge — remediation engine<a class="headerlink" href="#g-knowledge-bridge-remediation-engine" title="Permanent link">#</a></h2>
+<p><strong>T-BRDG-01 — Domain &lt;50% fires a bridge</strong> · [E]
+1. Score a run with one domain subtotal below 50%, others passing.
+<em>Expected:</em> a bridge fires for that domain and routes to its named drill.</p>
+<p><strong>T-BRDG-02 — Critical-fail item fires regardless of aggregate</strong> · [E]
+1. Score 0 on a critical-fail item while keeping the overall percentage above threshold.
+<em>Expected:</em> the station still fails; the critical bridge fires; the failure is surfaced explicitly, not averaged away.</p>
+<p><strong>T-BRDG-03 — Construct miss fires on concealed tiers</strong> · [E]
+1. On Advanced, score the construct-recognition item 0.
+<em>Expected:</em> the construct bridge fires (construct/prioritisation drill).</p>
+<p><strong>T-BRDG-04 — Lock, route, return on confidence path</strong> · [E]
+1. Trigger a critical-safety bridge (e.g. AS spinal fragility).
+<em>Expected:</em> the main station locks; the candidate is routed to the correct drill (spinal-fragility safety drill); on return they get a confidence path that does not immediately re-test the failed skill in isolation; critical-safety bridges take priority.</p>
+<p><strong>T-BRDG-05 — Station Report surfaces the outcome</strong> · [P]
+1. Open the <strong>Station Report</strong> (Screen 02) with a failing sample.
+<em>Expected:</em> the score wheel, the pass/threshold outcome, narrative feedback and any critical-safety flags are shown, and the page hands off to the Knowledge Bridge. The Station Report is a <em>summary</em> — it contains no remediation content of its own.</p>
+<p><strong>T-BRDG-06 — Knowledge Bridge generates targeted reinforcement</strong> · [P]
+1. From the Station Report, open the <strong>Knowledge Bridge</strong> (the remediation-engine screen).
+<em>Expected:</em> a gap analysis names the weak domains and any critical-safety gap; a generated reinforcement plan presents content tagged by type — mini-case, MCQ set, clinical pearl, framework review — each targeted to a specific weak domain; a confidence-path return follows. The Knowledge Bridge is a distinct learning surface, <strong>not</strong> the results page.</p>
+<hr />
+<h2 id="h-scoring-integrity-per-station-domains">H. Scoring integrity (per-station domains)<a class="headerlink" href="#h-scoring-integrity-per-station-domains" title="Permanent link">#</a></h2>
+<p><strong>T-SCORE-01 — Wheel renders the active station's own domains</strong> · [P pending] / [E]
+1. Open the result for ITB; note the five domain labels (Data Gathering, Clinical Reasoning &amp; Counseling, Communication, Safety, Professionalism &amp; Organisation).
+2. Open the result for AS; note its labels (Setup/Construct Recognition, Breaking Bad News, Disease &amp; Safety Knowledge, Counselling &amp; Alternatives, Communication/Integration).
+<em>Expected:</em> the wheel shows each station's <em>own</em> domain set; the label sets differ between stations. The score wheel renders on the Station Report; per-station variation is illustrated across the ITB and AS station pages.</p>
+<p><strong>T-SCORE-02 — Critical-fail override</strong> · [E]
+<em>Expected:</em> a 0 on any critical-fail item fails the station even when the aggregate percentage is at or above threshold; the override is shown explicitly on the result.</p>
+<p><strong>T-SCORE-03 — Threshold default + configurability</strong> · [E]
+1. Confirm default pass threshold is 65%.
+2. Score AS at exactly 27/42 (≈64.3%).
+3. Reconfigure the station threshold to 60%.
+<em>Expected:</em> 65% default; the AS boundary behaves per the configured value; threshold is settable per station/programme.</p>
+<p><strong>T-SCORE-04 — Level-adaptive weighting</strong> · [E]
+1. Score the same raw performance as <strong>student</strong>, then <strong>resident</strong>.
+<em>Expected:</em> the active station's domains re-weight per level; the percentage shifts accordingly; tier (concealment) and level (weighting) remain independent but coupled by default.</p>
+<hr />
+<h2 id="i-cross-cutting">I. Cross-cutting<a class="headerlink" href="#i-cross-cutting" title="Permanent link">#</a></h2>
+<p><strong>T-X-01 — Clinical-content lock (hallucination guard)</strong> · [E]
+1. Ask the SP a question whose answer is <strong>not</strong> in the station's locked content.
+<em>Expected:</em> the SP deflects or stays within locked facts; it never invents a clinical detail, dose, or safety claim. AI may rephrase tone only.
+<em>(Also a compliance requirement — see <code>STATION_COMPLIANCE.md</code>.)</em></p>
+<p><strong>T-X-02 — Theme toggle</strong> · [P]
+1. On each screen, toggle dark/light (top-right).
+<em>Expected:</em> both themes render correctly; brand colours and the gold pass-mark accent hold; no contrast breakage.</p>
+<p><strong>T-X-03 — Standalone render + relative links</strong> · [P]
+1. Open each screen file directly; from the launcher, click every V3 link.
+<em>Expected:</em> each screen renders standalone; all internal links resolve (no <code>../</code>, no broken targets).</p>
+<p><strong>T-X-04 — Model routing</strong> · [E]
+<em>Expected:</em> simulation turns use Claude Haiku 4.5; case generation, scoring, and Knowledge Bridge use Claude Sonnet 4.6 (per <code>IMPLEMENTATION_PLAN.md</code>).</p>
+<hr />
+<h2 id="j-per-station-end-to-end-smoke-runs">J. Per-station end-to-end smoke runs<a class="headerlink" href="#j-per-station-end-to-end-smoke-runs" title="Permanent link">#</a></h2>
+<p><strong>T-E2E-ITB-PASS</strong> · [E] — Run an ideal ITB encounter: rapport → context → prior-treatment review → ITB mechanism in plain language → benefits tied to holding his son → all four risk categories → contraindication screen → trial-dose → full withdrawal warning with ER instruction + pump-ID card + the oral-baclofen-can't-rescue point → teach-back → brochure/contact/follow-up/thanks. <em>Expected:</em> pass with no critical fail; no jargon cap.</p>
+<p><strong>T-E2E-ITB-FAIL</strong> · [E] — Run the same but <strong>omit the withdrawal warning</strong>. <em>Expected:</em> critical fail regardless of aggregate; Safety bridge → ER-withdrawal mini-case.</p>
+<p><strong>T-E2E-AS-PASS</strong> · [E] — Advanced tier: recognise the construct unprompted → warning shot → deliver plainly → pause for emotion before facts → counsel on exercise/posture/joint-protection → offer safe alternatives → shared plan + MDT → neuro safety-net. <em>Expected:</em> construct item scored; pass; no critical fail.</p>
+<p><strong>T-E2E-AS-FAIL</strong> · [E] — Advanced tier but <strong>miss spinal fragility / do not ban contact sport</strong>. <em>Expected:</em> item 8 critical fail; spinal-fragility safety bridge (highest priority); return path re-tests the safety item at the next tier up.</p>
+<hr />
+<h2 id="test-log-template">Test log template<a class="headerlink" href="#test-log-template" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Test ID</th>
+<th>Surface</th>
+<th>Result (P/F/Blocked)</th>
+<th>Tester</th>
+<th>Date</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></main></div><script>
+(function(){
+ var k='plexus-theme';
+ try{var s=localStorage.getItem(k);if(s)document.documentElement.setAttribute('data-theme',s);}catch(e){}
+ window.toggleTheme=function(){
+   var c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+   document.documentElement.setAttribute('data-theme',c);
+   try{localStorage.setItem(k,c);}catch(e){}
+   document.querySelectorAll('.theme-toggle').forEach(function(b){b.textContent=c==='dark'?'\u2600':'\u263d';});
+ };
+ document.addEventListener('DOMContentLoaded',function(){
+   var c=document.documentElement.getAttribute('data-theme')||'dark';
+   document.querySelectorAll('.theme-toggle').forEach(function(b){b.textContent=c==='dark'?'\u2600':'\u263d';});
+ });
+})();
+</script></body></html>

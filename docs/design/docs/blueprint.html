@@ -1,0 +1,455 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Master Station Blueprint · Plexus OSCE V3</title><style>
+:root{
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  --brand-teal:#14B8A6;--brand-teal-bright:#2DD4BF;--brand-teal-deep:#0D9488;
+  --brand-blue:#3B82F6;--brand-gold:#D4A574;--brand-navy:#062247;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:20px;--r-2xl:28px;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+[data-theme="dark"]{
+  --bg-base:#060B14;--bg-grad-1:#0B1A2E;--bg-grad-2:#0A1322;
+  --glass-1:rgba(255,255,255,0.03);--glass-2:rgba(255,255,255,0.05);--glass-3:rgba(255,255,255,0.08);
+  --border-subtle:rgba(255,255,255,0.06);--border-default:rgba(255,255,255,0.10);--border-strong:rgba(255,255,255,0.16);
+  --text-primary:rgba(248,250,252,0.96);--text-secondary:rgba(203,213,225,0.74);--text-tertiary:rgba(148,163,184,0.55);
+  --success:#34D399;--success-bg:rgba(52,211,153,0.10);--success-border:rgba(52,211,153,0.3);
+  --warning:#FBBF24;--warning-bg:rgba(251,191,36,0.10);--warning-border:rgba(251,191,36,0.3);
+  --danger:#F87171;--danger-bg:rgba(248,113,113,0.10);--danger-border:rgba(248,113,113,0.3);
+  --code-bg:rgba(255,255,255,0.05);--shadow-lg:0 12px 40px rgba(0,0,0,0.5);
+  --logo:url("../assets/plexus-white.png");
+}
+[data-theme="light"]{
+  --bg-base:#F1F5F9;--bg-grad-1:#E0EAF5;--bg-grad-2:#EDF2F8;
+  --glass-1:rgba(255,255,255,0.6);--glass-2:rgba(255,255,255,0.75);--glass-3:rgba(255,255,255,0.9);
+  --border-subtle:rgba(15,23,42,0.06);--border-default:rgba(15,23,42,0.10);--border-strong:rgba(15,23,42,0.16);
+  --text-primary:#0F172A;--text-secondary:#475569;--text-tertiary:#94A3B8;
+  --success:#0D9488;--success-bg:rgba(13,148,136,0.08);--success-border:rgba(13,148,136,0.3);
+  --warning:#B45309;--warning-bg:rgba(180,83,9,0.08);--warning-border:rgba(180,83,9,0.3);
+  --danger:#DC2626;--danger-bg:rgba(220,38,38,0.07);--danger-border:rgba(220,38,38,0.3);
+  --code-bg:rgba(15,23,42,0.05);--shadow-lg:0 12px 40px rgba(15,23,42,0.10);
+  --logo:url("../assets/plexus-blue.png");
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:var(--font-sans);background:
+  radial-gradient(1200px 800px at 80% -10%,var(--bg-grad-1),transparent 60%),
+  radial-gradient(1000px 700px at -10% 10%,var(--bg-grad-2),transparent 55%),
+  var(--bg-base);
+  color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--brand-teal-bright);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:20px;
+  padding:14px 28px;background:var(--glass-2);backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--border-default)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600;color:var(--text-primary)}
+.brand:hover{text-decoration:none}
+.brand-logo{width:104px;height:26px;background:var(--logo) no-repeat left center;background-size:contain}
+.brand-tag{font-size:11px;font-family:var(--font-mono);letter-spacing:.08em;color:var(--brand-teal-bright);
+  border:1px solid var(--brand-teal-deep);padding:2px 8px;border-radius:var(--r-full,9999px);border-radius:999px}
+.topnav{display:flex;gap:6px;margin-left:8px}
+.topnav a{color:var(--text-secondary);padding:7px 13px;border-radius:var(--r-md);font-size:14px;font-weight:500}
+.topnav a:hover{color:var(--text-primary);background:var(--glass-2);text-decoration:none}
+.topnav a.active{color:var(--brand-teal-bright);background:var(--glass-2)}
+.spacer{flex:1}
+.theme-toggle{background:var(--glass-2);border:1px solid var(--border-default);color:var(--text-secondary);
+  width:38px;height:38px;border-radius:var(--r-md);cursor:pointer;font-size:16px;display:grid;place-items:center}
+.theme-toggle:hover{color:var(--text-primary);border-color:var(--border-strong)}
+
+.layout{display:grid;grid-template-columns:300px 1fr;gap:0;max-width:1280px;margin:0 auto;align-items:start}
+.sidebar{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px);overflow-y:auto;
+  padding:28px 18px 60px;border-right:1px solid var(--border-subtle)}
+.side-h{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-tertiary);
+  margin:18px 8px 8px;font-weight:600}
+.doc-switch a{display:block;color:var(--text-secondary);padding:8px 10px;border-radius:var(--r-md);
+  font-size:13.5px;font-weight:500}
+.doc-switch a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.doc-switch a.cur{background:var(--glass-3);color:var(--brand-teal-bright)}
+.toc{margin-top:6px}
+.toc ul{list-style:none;padding-left:0}
+.toc>ul>li>a{font-weight:600}
+.toc li{margin:1px 0}
+.toc a{display:block;color:var(--text-secondary);padding:5px 10px;border-radius:8px;font-size:13px;
+  border-left:2px solid transparent}
+.toc a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.toc ul ul a{padding-left:22px;font-size:12.5px;color:var(--text-tertiary)}
+.content{padding:40px 56px 120px;max-width:860px;min-width:0}
+.content h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;margin:6px 0 6px}
+.content h2{font-size:21px;font-weight:650;margin:38px 0 12px;padding-top:14px;border-top:1px solid var(--border-subtle)}
+.content h3{font-size:16.5px;font-weight:600;margin:26px 0 8px;color:var(--text-primary)}
+.content h4{font-size:14px;font-weight:600;margin:18px 0 6px;color:var(--text-secondary)}
+.content p,.content li{color:var(--text-secondary);font-size:15px}
+.content strong{color:var(--text-primary);font-weight:650}
+.content ul,.content ol{padding-left:24px;margin:10px 0}
+.content li{margin:5px 0}
+.content blockquote{border-left:3px solid var(--brand-teal-deep);background:var(--glass-1);
+  padding:12px 18px;border-radius:0 var(--r-md) var(--r-md) 0;margin:16px 0;color:var(--text-secondary)}
+.content blockquote strong{color:var(--brand-teal-bright)}
+.content code{font-family:var(--font-mono);font-size:12.5px;background:var(--code-bg);
+  padding:2px 6px;border-radius:6px;color:var(--text-primary)}
+.content pre{background:var(--code-bg);border:1px solid var(--border-subtle);border-radius:var(--r-md);
+  padding:16px;overflow:auto;margin:14px 0}
+.content pre code{background:none;padding:0;font-size:12.5px;color:var(--text-secondary)}
+.content table{border-collapse:collapse;width:100%;margin:16px 0;font-size:13.5px;display:block;overflow-x:auto}
+.content th{text-align:left;background:var(--glass-2);color:var(--text-primary);font-weight:600;
+  padding:9px 12px;border:1px solid var(--border-default);white-space:nowrap}
+.content td{padding:9px 12px;border:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top}
+.content h2 a.toclink,.content h3 a.toclink,.content h1 a.toclink{opacity:0;color:var(--text-tertiary);
+  margin-left:8px;font-weight:400;text-decoration:none}
+.content h2:hover a.toclink,.content h3:hover a.toclink{opacity:1}
+.content li.task{list-style:none;margin-left:-18px;display:flex;gap:9px;align-items:flex-start}
+.content li.task .box{flex:0 0 16px;width:16px;height:16px;border:1.5px solid var(--border-strong);
+  border-radius:5px;margin-top:3px}
+.content li.task.done .box{background:var(--success);border-color:var(--success);position:relative}
+.content li.task.done .box::after{content:"✓";position:absolute;inset:0;color:#04221b;font-size:12px;
+  display:grid;place-items:center;font-weight:700}
+.doc-hero-shot{margin:18px 0 26px;border:1px solid var(--border-default);border-radius:var(--r-lg);
+  overflow:hidden;box-shadow:var(--shadow-lg);background:var(--glass-1)}
+.doc-hero-shot img{display:block;width:100%}
+.doc-hero-shot .cap{padding:9px 14px;font-size:12px;color:var(--text-tertiary);border-top:1px solid var(--border-subtle);
+  display:flex;justify-content:space-between;align-items:center}
+@media(max-width:920px){.layout{grid-template-columns:1fr}.sidebar{display:none}.content{padding:28px 22px 90px}}
+/*OSCE-TOPBAR-V2*/
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand-logo,.brand-tag{display:none!important}
+.brand-mark{width:32px;height:32px;flex:none;display:block;filter:drop-shadow(0 3px 9px rgba(13,148,136,.4))}
+.brand-mark svg{width:100%;height:100%;display:block}
+.brand-name{display:flex;flex-direction:column;line-height:1.06}
+.brand-name-main{font-family:var(--font-sans);font-size:16px;font-weight:650;letter-spacing:-.012em;color:var(--text-primary)}
+.brand-name-sub{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.16em;color:var(--brand-teal-bright)}
+.topnav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:3px}
+.topnav>a,.topnav .parent{color:var(--text-secondary);padding:8px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:5px;text-decoration:none;cursor:pointer;transition:color .15s,background .15s;white-space:nowrap}
+.topnav>a:hover,.topnav .parent:hover{color:var(--text-primary);background:var(--glass-2);text-decoration:none}
+.topnav>a.active{color:var(--brand-teal-bright);background:var(--glass-2)}
+.topnav .item{position:relative}
+.topnav .item.active>.parent{color:var(--brand-teal-bright);background:var(--glass-2)}
+.topnav .caret{width:11px;height:11px;opacity:.55;transition:transform .2s}
+.topnav .item:hover .caret{transform:rotate(180deg)}
+.topnav .item::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
+.submenu{position:absolute;top:calc(100% + 9px);left:0;min-width:228px;background:var(--glass-3);
+ backdrop-filter:blur(26px) saturate(150%);-webkit-backdrop-filter:blur(26px) saturate(150%);
+ border:1px solid var(--border-default);border-radius:var(--r-lg);
+ box-shadow:0 20px 52px -14px rgba(0,0,0,.5),0 6px 16px -8px rgba(0,0,0,.32);
+ padding:7px;display:flex;flex-direction:column;gap:1px;z-index:80;
+ opacity:0;visibility:hidden;transform:translateY(-7px);transition:opacity .18s,transform .18s,visibility .18s}
+.topnav .item:hover .submenu{opacity:1;visibility:visible;transform:translateY(0)}
+.submenu a{padding:8px 11px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);
+ white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:18px;text-decoration:none}
+.submenu a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.submenu .meta{font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary);letter-spacing:.03em}
+.submenu .sub-label{padding:7px 11px 3px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--text-tertiary)}
+.submenu .sub-div{height:1px;background:var(--border-subtle);margin:6px 5px}
+@media(max-width:1040px){.topnav>a,.topnav .parent{padding:8px 9px;font-size:13.5px}}
+@media(max-width:880px){.topnav{display:none}}
+</style></head><body><div class="topbar"><a class="brand" href="../index.html"><span class="brand-mark"><svg viewBox="0 0 488 488" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="pg" x1="0" y1="0" x2="488" y2="488" gradientUnits="userSpaceOnUse"><stop stop-color="#2DD4BF"/><stop offset="1" stop-color="#0D9488"/></linearGradient></defs><g fill="url(#pg)"><path transform="translate(443.0,42.7)" d="M0.0 0.0 C24.6 23.7 40.0 56.5 41.2 90.8 C41.6 132.3 26.7 164.7 -1.2 194.9 C-32.1 223.5 -68.7 232.5 -109.8 232.4 C-111.9 232.4 -114.0 232.4 -116.2 232.4 C-120.7 232.4 -125.2 232.3 -129.7 232.3 C-136.9 232.3 -144.1 232.3 -151.2 232.3 C-171.6 232.3 -191.9 232.2 -212.3 232.2 C-224.8 232.2 -237.2 232.1 -249.7 232.1 C-254.4 232.1 -259.2 232.1 -263.9 232.1 C-270.6 232.1 -277.2 232.1 -283.8 232.1 C-285.8 232.1 -287.8 232.1 -289.8 232.1 C-314.7 232.1 -335.7 237.3 -354.0 255.3 C-370.2 273.9 -375.4 294.1 -374.0 318.3 C-369.6 341.0 -358.0 358.4 -338.9 371.4 C-326.9 378.1 -315.2 381.4 -301.5 381.5 C-299.6 381.5 -297.6 381.5 -295.7 381.6 C-293.6 381.6 -291.5 381.6 -289.4 381.6 C-288.3 381.6 -288.3 381.6 -283.0 381.7 C-276.2 381.7 -269.4 381.8 -262.6 381.9 C-258.0 381.9 -253.4 381.9 -248.8 382.0 C-237.5 382.1 -226.2 382.2 -215.0 382.3 C-215.0 385.3 -215.0 385.3 -219.0 390.3 C-219.6 390.3 -220.3 390.3 -221.0 390.3 C-221.6 391.6 -222.3 392.9 -223.0 394.3 C-224.2 395.8 -225.5 397.3 -226.8 398.9 C-236.8 410.9 -244.7 424.2 -252.1 437.9 C-254.0 441.3 -254.0 441.3 -255.0 442.3 C-263.3 442.6 -271.6 442.5 -279.9 442.5 C-281.1 442.5 -281.1 442.5 -287.0 442.5 C-326.5 442.5 -361.5 434.1 -391.0 406.3 C-392.9 404.6 -394.9 403.0 -397.0 401.3 C-423.0 373.7 -436.0 338.0 -435.0 300.3 C-432.1 262.8 -416.0 231.8 -389.2 205.7 C-364.2 184.8 -334.3 172.2 -301.4 172.2 C-299.5 172.1 -297.6 172.1 -295.7 172.1 C-293.6 172.1 -291.5 172.1 -289.4 172.1 C-287.2 172.1 -285.1 172.1 -282.8 172.1 C-278.1 172.1 -273.3 172.1 -268.6 172.1 C-261.1 172.1 -253.6 172.1 -246.1 172.0 C-224.8 172.0 -203.4 171.9 -182.1 171.9 C-169.0 171.9 -156.0 171.8 -142.9 171.8 C-138.0 171.8 -133.0 171.8 -128.0 171.8 C-121.1 171.8 -114.1 171.7 -107.2 171.7 C-106.1 171.7 -106.1 171.7 -101.0 171.7 C-76.0 171.6 -56.3 165.1 -38.0 147.3 C-34.7 143.3 -34.7 143.3 -32.0 139.3 C-31.1 138.2 -30.3 137.0 -29.5 135.9 C-19.2 117.1 -17.2 97.4 -21.6 76.7 C-28.9 54.1 -42.1 39.3 -63.0 28.3 C-81.2 21.5 -102.7 20.1 -120.8 28.0 C-140.0 37.0 -153.4 49.8 -162.0 69.3 C-167.3 85.4 -167.0 101.9 -167.0 118.7 C-167.0 120.9 -167.0 123.1 -167.0 125.3 C-168.0 126.3 -168.0 126.3 -173.5 126.4 C-176.0 126.4 -178.4 126.4 -181.0 126.4 C-181.6 126.4 -181.6 126.4 -184.9 126.4 C-189.1 126.4 -193.3 126.4 -197.5 126.4 C-200.4 126.3 -203.2 126.3 -206.0 126.3 C-213.0 126.3 -220.0 126.3 -227.0 126.3 C-227.0 120.3 -227.1 114.3 -227.1 108.4 C-227.1 106.7 -227.1 105.0 -227.1 103.3 C-227.3 63.7 -215.0 29.9 -187.3 1.3 C-134.8 -50.2 -53.4 -48.8 0.0 0.0 Z "/><path transform="translate(350.0,121.0)" d="M0.0 0.0 C5.2 3.1 7.5 4.8 8.9 10.8 C9.0 16.0 7.9 18.6 5.0 23.0 C-1.7 27.5 -4.2 27.7 -12.0 27.0 C-18.0 23.0 -18.0 23.0 -21.0 16.0 C-20.5 10.1 -19.7 7.7 -15.5 3.5 C-10.0 -0.4 -6.8 -0.3 0.0 0.0 Z "/></g></svg></span><span class="brand-name"><span class="brand-name-main">Plexus</span><span class="brand-name-sub">OSCE · V3</span></span></a><nav class="topnav"><a href="../index.html" class="">Home</a><a href="../system.html" class="">Explore</a><div class="item"><a href="../system.html#screens" class="parent">Screens <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><div class="sub-label">Candidate</div><a href="../osce-screen-01-exam-chat.html">Exam encounter</a><a href="../osce-screen-02-station-report.html">Station report</a><a href="../osce-screen-knowledge-bridge.html">Knowledge Bridge</a><a href="../osce-screen-03-dashboard.html">Dashboard</a><a href="../osce-screen-05-profile.html">Profile</a><a href="../osce-screen-04-signin.html">Sign in</a><div class="sub-div"></div><div class="sub-label">Admin</div><a href="../osce-screen-06-admin-overview.html">Overview</a><a href="../osce-screen-07-admin-tokens.html">Token controls</a><a href="../osce-screen-08-admin-users-specs.html">Users &amp; specialties</a><a href="../osce-screen-09-system-settings.html">System settings</a><a href="../osce-screen-10-audit-log.html">Audit log</a><div class="sub-div"></div><a href="../osce-design-system-v1.html">Design system</a></div></div><div class="item"><a href="../system.html#stations" class="parent">Stations <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><a href="../docs/station-itb.html">ITB Pump <span class="meta">PMR-002</span></a><a href="../docs/station-as.html">Ankylosing Spondylitis <span class="meta">PLX-PMR-AS-001</span></a></div></div><div class="item active"><a href="../docs/index.html" class="parent">Documentation <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><a href="../docs/index.html">Documentation hub</a><a href="../docs/requirements-map.html">Requirements map</a><a href="../docs/blueprint.html">Master Blueprint</a><a href="../docs/compliance.html">Station Compliance</a><a href="../docs/test-plan.html">Test Plan</a><a href="../docs/implementation.html">Implementation Plan</a><a href="../docs/brd-gap.html">BRD Gap Analysis</a></div></div><a href="../docs/requirements-map.html" class="">Requirements</a></nav><div class="spacer"></div><button class="theme-toggle" onclick="toggleTheme()">☀</button></div><div class="layout"><aside class="sidebar"><div class="side-h">Station templates</div><div class="doc-switch"><a class="" href="station-itb.html">ITB Pump — Counseling station</a><a class="" href="station-as.html">Ankylosing Spondylitis — Master station</a></div><div class="side-h">Specifications</div><div class="doc-switch"><a class="cur" href="blueprint.html">Master Station Blueprint</a><a class="" href="compliance.html">Station Compliance</a><a class="" href="test-plan.html">V3 Test Plan</a><a class="" href="implementation.html">Implementation Plan</a><a class="" href="brd-gap.html">BRD Gap Analysis</a></div><div class="side-h">On this page</div><div class="toc"><div class="toc">
+<ul>
+<li><a href="#0-the-core-idea-one-master-station-many-variants">0. The core idea: one master station, many variants</a></li>
+<li><a href="#1-scoring-model-per-station-domains-v3-decision">1. Scoring model — per-station domains (V3 decision)</a><ul>
+<li><a href="#the-two-reference-stations-declare-different-domains-by-design">The two reference stations declare different domains — by design</a></li>
+</ul>
+</li>
+<li><a href="#2-the-seven-engine-pillars">2. The seven engine pillars</a></li>
+<li><a href="#3-fixed-station-sections-authoring-shape">3. Fixed station sections (authoring shape)</a></li>
+<li><a href="#5-difficulty-concealment-the-ai-dial">5. Difficulty &amp; concealment — the AI Dial</a></li>
+<li><a href="#6-randomised-patient-question-pool">6. Randomised patient-question pool</a></li>
+<li><a href="#9-jargon-detection-communication-layer">9. Jargon detection &amp; communication layer</a></li>
+<li><a href="#10-closing-protocol-teach-back">10. Closing protocol &amp; teach-back</a></li>
+<li><a href="#11-exam-mode-vs-tutor-mode">11. Exam mode vs Tutor mode</a></li>
+<li><a href="#12-the-station-report-and-the-knowledge-bridge-two-distinct-surfaces">12. The Station Report and the Knowledge Bridge — two distinct surfaces</a></li>
+<li><a href="#authoring-checklist-per-station">Authoring checklist (per station)</a></li>
+</ul>
+</div>
+</div></aside><main class="content"><a class="doc-hero-shot" href="../osce-screen-knowledge-bridge.html" title="Open the live screen"><img src="../assets/shots/knowledge-bridge.png" alt="Knowledge Bridge — remediation engine"><div class="cap"><span>Related screen — Knowledge Bridge — remediation engine</span><span>open live ↗</span></div></a><h1 id="plexus-master-station-blueprint-v2-authoring-template">Plexus Master Station Blueprint — v2 (authoring template)<a class="headerlink" href="#plexus-master-station-blueprint-v2-authoring-template" title="Permanent link">#</a></h1>
+<p><strong>Status:</strong> Canonical authoring spec for the Plexus OSCE engine (introduced in design V3).
+<strong>Derived from:</strong> two client-authored station templates — <code>PMR-002</code> (Intrathecal Baclofen Pump — counseling &amp; informed consent) and <code>PLX-PMR-AS-001</code> (Ankylosing Spondylitis — breaking bad news &amp; joint-protection counselling) — plus the client's executive summary of the Plexus OSCE ecosystem.
+<strong>Purpose:</strong> give clinical authors, content reviewers, and the AI engineering team one fixed shape for every station, so that the prototype screens, the implementation plan, and the running engine all agree.</p>
+<blockquote>
+<p>This document defines <em>how a station is structured</em>. It does not define the brand, the screens, or the build stack — those live in the design system, the screen library, and <code>IMPLEMENTATION_PLAN.md</code>. Where the engine has to enforce something, the relevant rule is tagged <strong>[ENGINE]</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="0-the-core-idea-one-master-station-many-variants">0. The core idea: one master station, many variants<a class="headerlink" href="#0-the-core-idea-one-master-station-many-variants" title="Permanent link">#</a></h2>
+<p>A Plexus station is <strong>not</strong> a fixed script. It is a locked body of clinical fact plus a locked rubric, wrapped in layers the AI is allowed to vary. The same station can be run as an easy explicit task for a student or a concealed, confrontational task for a senior — <strong>without changing a single clinical fact or rubric item.</strong> Difficulty is a presentation layer, never a content layer.</p>
+<p>Five things the engine may vary per run; two things it may never touch:</p>
+<table>
+<thead>
+<tr>
+<th>May vary per run (presentation)</th>
+<th>Never varies (content)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How much of the task is revealed to the candidate (tier / concealment)</td>
+<td>The clinical facts (Section 3)</td>
+</tr>
+<tr>
+<td>The simulated patient's affect and resistance</td>
+<td>The rubric items and their critical-fail status (Section 8)</td>
+</tr>
+<tr>
+<td>How explicit the patient's cues are</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Which 2–3 patient questions are drawn (Section 6)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Operating mode (Exam vs Tutor)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-scoring-model-per-station-domains-v3-decision">1. Scoring model — <strong>per-station domains</strong> (V3 decision)<a class="headerlink" href="#1-scoring-model-per-station-domains-v3-decision" title="Permanent link">#</a></h2>
+<p>This is the decision that shapes the score-reveal screen, the analytics, and the remediation router.</p>
+<ul>
+<li><strong>Each station declares its own domain set.</strong> There is no fixed universal taxonomy across stations. The <strong>Station Report</strong> score wheel (see §12) renders whatever domains the <em>active</em> station defines.</li>
+<li>A station's rubric is a list of <strong>items</strong>, each scored, each weighted (or scored 0/1/2), and each assigned to exactly one of that station's domains.</li>
+<li><strong>Raw marks normalise to a 0–100 percentage</strong> for display and threshold logic. A station whose senior tier totals 42 marks and whose lower tier totals 40 marks both report on the same 0–100 wheel — the percentage is the comparable number, the raw marks are the authoring substrate. (This is why V3 keeps percentage reporting from design V2; the two client docs <em>validate</em> it rather than contradict it.)</li>
+<li><strong>Pass threshold defaults to 65%</strong>, configurable per station / per programme (range 60–70% in practice). The AS template's 27/42 ≈ 64.3% pass is an instance of this.</li>
+<li><strong>Critical-fail items override the percentage.</strong> Any item tagged <code>[CRITICAL-FAIL]</code> that scores 0 fails the station regardless of the aggregate — surfaced explicitly on the score reveal, not silently folded into a domain average.</li>
+<li><strong>Level-adaptive weighting is per-station.</strong> A station may define different item weights for student vs resident vs physician. The design-V2 student/resident toggle on the Station Report now re-weights <em>the active station's</em> domains, not a fixed five.</li>
+</ul>
+<h3 id="the-two-reference-stations-declare-different-domains-by-design">The two reference stations declare different domains — by design<a class="headerlink" href="#the-two-reference-stations-declare-different-domains-by-design" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>PMR-002</code> (ITB pump)</th>
+<th><code>PLX-PMR-AS-001</code> (Ankylosing Spondylitis)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Domain 1 / A</td>
+<td>Data Gathering</td>
+<td>Setup, Understanding &amp; Construct Recognition</td>
+</tr>
+<tr>
+<td>Domain 2 / B</td>
+<td>Clinical Reasoning &amp; Counseling Content</td>
+<td>Breaking Bad News (SPIKES)</td>
+</tr>
+<tr>
+<td>Domain 3 / C</td>
+<td>Communication</td>
+<td>Disease &amp; Safety Knowledge</td>
+</tr>
+<tr>
+<td>Domain 4 / D</td>
+<td>Safety</td>
+<td>Counselling &amp; Alternatives</td>
+</tr>
+<tr>
+<td>Domain 5 / E</td>
+<td>Professionalism &amp; Organisation</td>
+<td>Communication, Integration &amp; Safety-netting</td>
+</tr>
+<tr>
+<td>Scoring unit</td>
+<td>Essential / Important per item</td>
+<td>0 / 1 / 2 per item</td>
+</tr>
+<tr>
+<td>Total (senior)</td>
+<td>normalised → 0–100%</td>
+<td>42 → 0–100%</td>
+</tr>
+</tbody>
+</table>
+<p>Both reduce to a 0–100% wheel; the <strong>labels and item groupings differ per station</strong> and that is expected.</p>
+<hr />
+<h2 id="2-the-seven-engine-pillars">2. The seven engine pillars<a class="headerlink" href="#2-the-seven-engine-pillars" title="Permanent link">#</a></h2>
+<p>Every station exercises some or all of these. They are the capabilities the engine must implement; a station's sections (below) configure them.</p>
+<ol>
+<li><strong>Difficulty &amp; task-concealment tiers ("AI Dial")</strong> — §5.</li>
+<li><strong>Progressive (controlled) disclosure</strong> of withheld facts — §4 + §7.</li>
+<li><strong>Randomised patient-question pool</strong> — §6.</li>
+<li><strong>Live jargon detection &amp; communication layer</strong> — §9.</li>
+<li><strong>Enforced closing / teach-back</strong> — §10.</li>
+<li><strong>Exam mode vs Tutor mode</strong> — §11.</li>
+<li><strong>Knowledge Bridge remediation engine</strong> — §12.</li>
+</ol>
+<hr />
+<h2 id="3-fixed-station-sections-authoring-shape">3. Fixed station sections (authoring shape)<a class="headerlink" href="#3-fixed-station-sections-authoring-shape" title="Permanent link">#</a></h2>
+<p>A station file MUST contain the following sections in order. Sections marked <strong>LOCKED</strong> are clinical content the AI may rephrase for tone but must never add to, invent, or change.</p>
+<p><strong>S0 · Identity &amp; metadata</strong> — station ID, specialty, station type, candidate tiers offered, default tier, time limit(s) per tier, mode compatibility, total raw marks per tier, pass threshold, construct statement.</p>
+<p><strong>S1 · Candidate instructions (tiered)</strong> — the door brief, written once per tier (Basic / Intermediate / Advanced). The candidate sees only the prompt for the active tier. <em>(See §5 for what each tier means.)</em></p>
+<p><strong>S1B · Concealed construct</strong> — the list of things the candidate must <em>discover</em> without being told (e.g. "this diagnosis is life-altering news; bad news must precede facts"). Hidden in Exam mode; surfaced only in feedback and Tutor mode.</p>
+<p><strong>S2 · Patient brief / door note</strong> — what is displayed on the station door. Nothing further is given to the candidate.</p>
+<p><strong>S3 · Patient profile — internal AI knowledge [LOCKED]</strong> — identity, background, clinical burden, prior treatments, emotional state. Never displayed to the candidate.</p>
+<p><strong>S4 · Withheld-information map</strong> — facts the patient holds back until the candidate asks the right question (e.g. "found an online post claiming a patient died from pump failure" → released only when asked about concerns/fears). Drives the progressive-disclosure state machine. <strong>[ENGINE]</strong> each withheld item is a locked variable, released only on the matching elicitation.</p>
+<p><strong>S5 · Clinical / mechanism deep-dive [LOCKED]</strong> — the lay-language script the candidate should be able to produce, plus the clinical reasoning behind it for examiner reference. Includes any "crucial lie checks" (e.g. <em>oral baclofen cannot rescue intrathecal withdrawal</em>).</p>
+<p><strong>S6 · Randomised question pool</strong> — see §6.</p>
+<p><strong>S7 · Progressive disclosure / AI behavioural logic</strong> — the candidate-action → patient-response table, including jargon reactions and emotional checkpoints.</p>
+<p><strong>S8 · Scoring rubric</strong> — the station's domains and items (§1). Each item: weight or 0/1/2, domain tag, and optional <code>[CRITICAL-FAIL]</code> / <code>[CONSTRUCT]</code> flags.</p>
+<p><strong>S9 · Jargon detection &amp; communication layer</strong> — see §9.</p>
+<p><strong>S10 · Closing protocol</strong> — see §10.</p>
+<p><strong>S11 · Critical safety flags</strong> — automatic deductions / station-fail conditions regardless of aggregate score.</p>
+<p><strong>S12 · Examiner notes &amp; clinical pearls</strong> — common candidate mistakes, teaching points.</p>
+<p><strong>S13 · Knowledge Bridge triggers</strong> — see §12.</p>
+<hr />
+<h2 id="5-difficulty-concealment-the-ai-dial">5. Difficulty &amp; concealment — the AI Dial<a class="headerlink" href="#5-difficulty-concealment-the-ai-dial" title="Permanent link">#</a></h2>
+<p>Three tiers. The AI varies the presentation layer only.</p>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Basic</th>
+<th>Intermediate</th>
+<th>Advanced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task statement</td>
+<td>Explicit, step-by-step</td>
+<td>Broad directive ("counsel this patient")</td>
+<td>Minimal ("take a history &amp; answer questions") — task must be discovered</td>
+</tr>
+<tr>
+<td>Patient affect</td>
+<td>Calm, accepts readily</td>
+<td>Mildly anxious; needs reassurance</td>
+<td>Denial / anger / tears; resists</td>
+</tr>
+<tr>
+<td>Cue explicitness</td>
+<td>Volunteers concerns</td>
+<td>Reveals on invitation</td>
+<td>Hides salient concerns; emerge only if explored well</td>
+</tr>
+<tr>
+<td>Follow-up questions</td>
+<td>Simple, factual</td>
+<td>Factual + emotional</td>
+<td>Confrontational, prognostic, challenging</td>
+</tr>
+<tr>
+<td>Construct-recognition item</td>
+<td>Omitted (task is explicit)</td>
+<td>Scored</td>
+<td>Scored</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[ENGINE]</strong> Because the construct-recognition item is omitted on Basic, a station's <em>raw total differs by tier</em> (e.g. AS: 42 senior, 40 basic). Percentage normalisation (§1) absorbs this. The rubric items themselves are identical across tiers; only their visibility and the patient's behaviour change.</p>
+<p><strong>Tier vs level.</strong> Tier (concealment/difficulty) and candidate level (student/resident/physician, which drives domain <em>weighting</em> per §1) are <strong>orthogonal but coupled by default</strong>: a candidate's level sets a default tier and default weights, both independently overridable. Authoring a station does not require enumerating every tier×level combination — weights are level-keyed, visibility is tier-keyed.</p>
+<hr />
+<h2 id="6-randomised-patient-question-pool">6. Randomised patient-question pool<a class="headerlink" href="#6-randomised-patient-question-pool" title="Permanent link">#</a></h2>
+<p><strong>[ENGINE]</strong> Each run draws <strong>2–3 questions</strong> from the pool, with category floors: at minimum <strong>1 Safety</strong> and <strong>1 Lifestyle</strong> question every session; the remaining 0–1 is drawn from any category. Questions are tagged <code>SPONTANEOUS</code> (fire automatically at a defined point) or <code>ON INVITE</code> (fire only if the candidate asks "any other questions?"). Each answered question is scored on whether the candidate gives a comprehension check-in ("does that answer your question?") afterward. Model answers live in the pool for Tutor/examiner reference only.</p>
+<hr />
+<h2 id="9-jargon-detection-communication-layer">9. Jargon detection &amp; communication layer<a class="headerlink" href="#9-jargon-detection-communication-layer" title="Permanent link">#</a></h2>
+<p>The most concretely specified subsystem. Active for any station whose patient has a non-medical background.</p>
+<ul>
+<li><strong>Watch-list:</strong> each station lists flagged terms with a plain-language equivalent and an "acceptable use" example (term + same-sentence lay translation = acceptable; term alone = a flag).</li>
+<li><strong>[ENGINE] Matching</strong> is case-insensitive and covers morphological variants ("titrate" flags "titrating", "titrated").</li>
+<li><strong>Escalating counter (per session):</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Unexplained-jargon count</th>
+<th>Patient behaviour</th>
+<th>Scoring effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1st</td>
+<td>Brief confusion, asks for explanation</td>
+<td>No deduction yet (chance to self-correct)</td>
+</tr>
+<tr>
+<td>2nd</td>
+<td>Mild frustration</td>
+<td>Minor deduction in the communication domain</td>
+</tr>
+<tr>
+<td>3rd</td>
+<td>Visible disengagement</td>
+<td>Moderate deduction; communication score capped</td>
+</tr>
+<tr>
+<td>4th+</td>
+<td>Stops engaging; teach-back will fail</td>
+<td>Significant deduction; communication cannot recover</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Self-correction</strong> after a flag resets the counter and avoids deduction. The counter does <strong>not</strong> reset if the candidate self-corrects but introduces a new flagged term in the same turn.</li>
+<li><strong>Analogy bank:</strong> pre-approved analogies per station (e.g. "watering one plant by flooding the whole garden" for oral-vs-intrathecal delivery). In Tutor mode the AI may surface one after an unaddressed flag; in Exam mode it never does.</li>
+<li><strong>[ENGINE]</strong> The counter is passed to the scoring engine at session end as an integer 0–4+ and maps onto the communication-domain band for that station.</li>
+</ul>
+<hr />
+<h2 id="10-closing-protocol-teach-back">10. Closing protocol &amp; teach-back<a class="headerlink" href="#10-closing-protocol-teach-back" title="Permanent link">#</a></h2>
+<p>Enforced in all modes; assessed silently in Exam mode, prompted in Tutor mode. Mandatory ordered sequence: <strong>teach-back → invite further questions → provide written material → provide contact → arrange follow-up → thank &amp; close.</strong></p>
+<ul>
+<li><strong>[ENGINE] Teach-back is a critical safety item.</strong> The engine must evaluate the patient's generated summary to confirm the candidate actually prompted understanding; closing without teach-back is a silent critical fail (the patient does not prompt for it).</li>
+<li>If the candidate omits the brochure or contact step, the patient prompts spontaneously ("will you give me anything written?"). If the candidate omits teach-back, the patient does <strong>not</strong> prompt — the omission must cost them.</li>
+</ul>
+<hr />
+<h2 id="11-exam-mode-vs-tutor-mode">11. Exam mode vs Tutor mode<a class="headerlink" href="#11-exam-mode-vs-tutor-mode" title="Permanent link">#</a></h2>
+<ul>
+<li><strong>Exam / OSCE mode:</strong> the AI stays fully in character, volunteers nothing, reveals no construct, and assesses silently. ("OSCE mode" and "Exam mode" in the source docs are the same strict mode; V3 standardises on <strong>Exam mode</strong>.)</li>
+<li><strong>Tutor mode:</strong> Socratic coaching <strong>during</strong> the encounter at natural pauses only (candidate stalls, finishes a phase, or asks for help) — never mid-sentence, never the answer outright ("what do you think this young man most needs from you right now?"). <strong>After</strong> the encounter: directive feedback — reveal the concealed construct, map performance to the rubric item-by-item, explain any bridge fired, and give one or two concrete improvements (not an exhaustive list).</li>
+</ul>
+<hr />
+<h2 id="12-the-station-report-and-the-knowledge-bridge-two-distinct-surfaces">12. The Station Report and the Knowledge Bridge — two distinct surfaces<a class="headerlink" href="#12-the-station-report-and-the-knowledge-bridge-two-distinct-surfaces" title="Permanent link">#</a></h2>
+<p><strong>These are not the same screen, and the distinction matters.</strong> A recurring terminology error is to call the results page the "Knowledge Bridge." It is not.</p>
+<ul>
+<li>The <strong>Station Report</strong> is the post-simulation <strong>results / feedback summary</strong>: the score on the station's own domains, the pass/threshold outcome, narrative feedback, strengths, missed points and any critical-safety flags. It tells the candidate <em>how the encounter went</em>. It is a summary screen — nothing more.</li>
+<li>The <strong>Knowledge Bridge</strong> is a dedicated <strong>post-simulation remediation engine</strong> — a learning layer in its own right, not a results page. It reads the Station Report, isolates the domains where the candidate struggled, and <strong>generates personalized reinforcement content targeted to each gap</strong>. The candidate works through that content, then returns to a live station.</li>
+</ul>
+<p><strong>[ENGINE] When the Bridge engages.</strong> After a Station Report, the Knowledge Bridge activates when <strong>any</strong> of:</p>
+<ol>
+<li>a <strong>domain subtotal &lt; 50%</strong>, or</li>
+<li>any <strong><code>[CRITICAL-FAIL]</code> item scores 0</strong>, or</li>
+<li>(concealed tiers only) the <strong>construct-recognition item scores 0</strong>.</li>
+</ol>
+<p><strong>[ENGINE] What it generates.</strong> For each triggering gap the engine produces targeted reinforcement — drawn from the station's S13 map and generated to the candidate's specific weakness — tagged by type:</p>
+<ul>
+<li><strong>Mini-cases</strong> — short interactive scenarios that rehearse the missed skill.</li>
+<li><strong>MCQ sets</strong> — single-best-answer questions with per-option rationale.</li>
+<li><strong>Clinical pearls</strong> — focused teaching cards.</li>
+<li><strong>Framework reviews</strong> — structured method walk-throughs (e.g. SPIKES, teach-back, consultation structure).</li>
+</ul>
+<p>Content is generated by Claude Sonnet 4.6 from the candidate's performance and <strong>regenerates as their weak domains change</strong> — it is not a fixed library.</p>
+<p><strong>[ENGINE] Return on a confidence path.</strong> After remediation the engine does <strong>not</strong> re-test the failed skill in isolation; it routes the candidate to a lower-tier full station to rebuild the skill in context. Critical-safety bridges (e.g. spinal fragility) take highest priority and may re-test the specific safety item at the next tier up.</p>
+<p>Reinforcement content is <strong>specified per station</strong> in S13 and authored as separate artifacts. Recommended build order mirrors the AS template: (1) SPIKES-only, (2) spinal-safety, (3) plain-language/jargon, (4) construct-recognition.</p>
+<hr />
+<h2 id="authoring-checklist-per-station">Authoring checklist (per station)<a class="headerlink" href="#authoring-checklist-per-station" title="Permanent link">#</a></h2>
+<ul>
+<li class="task"><span class="box"></span>S0 metadata complete; tiers offered + default tier set; per-tier time + raw totals; pass threshold.</li>
+<li class="task"><span class="box"></span>S1 prompts written for every offered tier; S1B concealed construct listed.</li>
+<li class="task"><span class="box"></span>S3 + S5 clinical content <strong>LOCKED</strong> and reviewed; any "crucial lie checks" stated in lay + clinical form.</li>
+<li class="task"><span class="box"></span>S4 withheld-info map: each item has an explicit elicitation trigger.</li>
+<li class="task"><span class="box"></span>S6 pool tagged by category with Safety + Lifestyle floors satisfied; each question SPONTANEOUS/ON INVITE + model answer.</li>
+<li class="task"><span class="box"></span>S8 rubric: <strong>this station's</strong> domains declared; every item domain-tagged + weighted/0-1-2; critical-fail and construct items flagged; level weights set.</li>
+<li class="task"><span class="box"></span>S9 jargon watch-list + analogy bank populated.</li>
+<li class="task"><span class="box"></span>S10 closing items present; teach-back marked critical.</li>
+<li class="task"><span class="box"></span>S11 critical safety flags enumerated.</li>
+<li class="task"><span class="box"></span>S13 bridge triggers mapped to named drills with return paths.</li>
+</ul>
+<hr />
+<p><em>Reference instances:</em> <code>PMR-002</code> and <code>PLX-PMR-AS-001</code> are the two fully-authored stations this template was abstracted from; use them as worked examples when authoring a new station.</p></main></div><script>
+(function(){
+ var k='plexus-theme';
+ try{var s=localStorage.getItem(k);if(s)document.documentElement.setAttribute('data-theme',s);}catch(e){}
+ window.toggleTheme=function(){
+   var c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+   document.documentElement.setAttribute('data-theme',c);
+   try{localStorage.setItem(k,c);}catch(e){}
+   document.querySelectorAll('.theme-toggle').forEach(function(b){b.textContent=c==='dark'?'\u2600':'\u263d';});
+ };
+ document.addEventListener('DOMContentLoaded',function(){
+   var c=document.documentElement.getAttribute('data-theme')||'dark';
+   document.querySelectorAll('.theme-toggle').forEach(function(b){b.textContent=c==='dark'?'\u2600':'\u263d';});
+ });
+})();
+</script></body></html>

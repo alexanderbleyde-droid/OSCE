@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plexus OSCE Simulator — Knowledge Bridge</title>
+<style>
+:root{
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  --brand-teal:#14B8A6;--brand-teal-bright:#2DD4BF;--brand-teal-deep:#0D9488;--brand-gold:#D4A574;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s10:40px;--s12:48px;
+  --r-md:10px;--r-lg:14px;--r-xl:20px;--r-2xl:28px;--ease:cubic-bezier(0.16,1,0.3,1);
+}
+[data-theme="dark"]{
+  --bg-base:#060B14;--bg-grad-1:#0B1A2E;--bg-grad-2:#0A1322;
+  --glass-1:rgba(255,255,255,0.03);--glass-2:rgba(255,255,255,0.05);--glass-3:rgba(255,255,255,0.08);
+  --border-subtle:rgba(255,255,255,0.06);--border-default:rgba(255,255,255,0.10);--border-strong:rgba(255,255,255,0.16);
+  --text-primary:rgba(248,250,252,0.96);--text-secondary:rgba(203,213,225,0.74);--text-tertiary:rgba(148,163,184,0.55);
+  --warning:#FBBF24;--warning-bg:rgba(251,191,36,0.10);--warning-border:rgba(251,191,36,0.3);
+  --danger:#F87171;--danger-bg:rgba(248,113,113,0.10);--danger-border:rgba(248,113,113,0.3);
+  --logo:url("assets/plexus-white.png");--text-on-brand:#06251F;
+}
+[data-theme="light"]{
+  --bg-base:#F1F5F9;--bg-grad-1:#E0EAF5;--bg-grad-2:#EDF2F8;
+  --glass-1:rgba(255,255,255,0.6);--glass-2:rgba(255,255,255,0.78);--glass-3:rgba(255,255,255,0.9);
+  --border-subtle:rgba(15,23,42,0.06);--border-default:rgba(15,23,42,0.10);--border-strong:rgba(15,23,42,0.16);
+  --text-primary:#0F172A;--text-secondary:#475569;--text-tertiary:#94A3B8;
+  --warning:#B45309;--warning-bg:rgba(180,83,9,0.08);--warning-border:rgba(180,83,9,0.3);
+  --danger:#DC2626;--danger-bg:rgba(220,38,38,0.07);--danger-border:rgba(220,38,38,0.3);
+  --logo:url("assets/plexus-blue.png");--text-on-brand:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);color:var(--text-primary);min-height:100vh;line-height:1.6;
+ background:radial-gradient(1200px 800px at 85% -10%,var(--bg-grad-1),transparent 60%),
+ radial-gradient(900px 700px at -10% 5%,var(--bg-grad-2),transparent 55%),var(--bg-base);}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;padding:13px 26px;
+ background:var(--glass-2);backdrop-filter:blur(20px) saturate(140%);border-bottom:1px solid var(--border-default)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo{width:104px;height:26px;background:var(--logo) no-repeat left center;background-size:contain}
+.brand-tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--brand-teal-bright);
+ border:1px solid var(--brand-teal-deep);padding:3px 9px;border-radius:999px}
+.spacer{flex:1}
+.back{color:var(--text-secondary);font-size:13.5px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+ padding:7px 12px;border-radius:var(--r-md)}
+.back:hover{color:var(--text-primary);background:var(--glass-2)}
+.toggle{background:var(--glass-2);border:1px solid var(--border-default);color:var(--text-secondary);width:36px;height:36px;
+ border-radius:var(--r-md);cursor:pointer;font-size:15px}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 28px 100px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;
+ text-transform:uppercase;color:var(--brand-teal-bright);border:1px solid var(--brand-teal-deep);padding:5px 13px;border-radius:999px}
+h1{font-size:34px;font-weight:750;letter-spacing:-0.025em;margin:16px 0 10px}
+.lede{font-size:16px;color:var(--text-secondary);max-width:680px}
+.lede b{color:var(--text-primary)}
+.sec-h{font-size:12px;text-transform:uppercase;letter-spacing:.11em;color:var(--text-tertiary);font-weight:600;
+ margin:44px 0 16px;display:flex;align-items:center;gap:12px}
+.sec-h::after{content:"";flex:1;height:1px;background:var(--border-subtle)}
+.gap{display:flex;flex-direction:column;gap:12px}
+.gap-row{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:center;background:var(--glass-1);
+ border:1px solid var(--border-default);border-radius:var(--r-lg);padding:16px 20px}
+.gap-row.crit{border-color:var(--danger-border);background:var(--danger-bg)}
+.gap-name{font-weight:650;font-size:14.5px}
+.gap-name .pct{font-family:var(--font-mono);color:var(--text-tertiary);font-size:13px;margin-left:8px}
+.gap-name .flag{display:inline-block;margin-top:6px;font-size:11px;font-family:var(--font-mono);letter-spacing:.04em;
+ color:var(--danger);border:1px solid var(--danger-border);padding:2px 8px;border-radius:999px}
+.gap-diag{font-size:13.5px;color:var(--text-secondary)}
+.bar{height:7px;border-radius:999px;background:var(--glass-3);overflow:hidden;margin-top:8px}
+.bar > i{display:block;height:100%;border-radius:999px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:16px}
+.rc{background:var(--glass-1);border:1px solid var(--border-default);border-radius:var(--r-xl);padding:20px 22px;
+ transition:transform .2s var(--ease),border-color .2s;display:flex;flex-direction:column}
+.rc:hover{transform:translateY(-2px);border-color:var(--border-strong)}
+.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rc-type{font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+ padding:4px 10px;border-radius:999px;font-weight:600}
+.t-case{color:#2DD4BF;background:rgba(45,212,191,0.12);border:1px solid rgba(45,212,191,0.3)}
+.t-mcq{color:#A78BFA;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3)}
+.t-pearl{color:var(--brand-gold);background:rgba(212,165,116,0.12);border:1px solid rgba(212,165,116,0.35)}
+.t-fw{color:#60A5FA;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3)}
+.rc-time{font-size:12px;color:var(--text-tertiary);font-family:var(--font-mono)}
+.rc-title{font-size:17px;font-weight:650;letter-spacing:-0.01em;margin-bottom:7px}
+.rc-target{font-size:12px;color:var(--text-tertiary);margin-bottom:9px}
+.rc-target b{color:var(--brand-teal-bright);font-weight:600}
+.rc-why{font-size:13.5px;color:var(--text-secondary);line-height:1.55;flex:1}
+.rc-btn{margin-top:16px;align-self:flex-start;background:var(--glass-3);border:1px solid var(--border-strong);
+ color:var(--text-primary);font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:var(--r-md);cursor:pointer;
+ display:inline-flex;align-items:center;gap:7px}
+.rc-btn:hover{border-color:var(--brand-teal-deep);color:var(--brand-teal-bright)}
+.note{margin-top:22px;display:flex;gap:12px;align-items:flex-start;background:var(--glass-1);
+ border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:15px 18px;font-size:13.5px;color:var(--text-secondary)}
+.note svg{flex:0 0 18px;color:var(--brand-teal-bright);margin-top:1px}
+.return{margin-top:40px;border:1px solid var(--brand-teal-deep);border-radius:var(--r-2xl);padding:26px 28px;
+ background:linear-gradient(150deg,rgba(20,184,166,0.10),var(--glass-2));display:flex;flex-wrap:wrap;gap:18px;
+ align-items:center;justify-content:space-between}
+.return .t{font-size:18px;font-weight:650;margin-bottom:5px}
+.return .d{font-size:14px;color:var(--text-secondary);max-width:560px}
+.btn-primary{background:linear-gradient(135deg,var(--brand-teal),var(--brand-teal-deep));color:var(--text-on-brand);
+ border:none;font-size:15px;font-weight:650;padding:12px 22px;border-radius:var(--r-md);cursor:pointer;
+ display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap}
+.foot-note{text-align:center;color:var(--text-tertiary);font-size:12px;padding:30px 0}
+@media(max-width:560px){.gap-row{grid-template-columns:1fr}h1{font-size:27px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><span class="brand-logo"></span><span class="brand-tag">Knowledge Bridge</span></div>
+  <div class="spacer"></div>
+  <a class="back" href="osce-screen-02-station-report.html">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Station Report
+  </a>
+  <button class="toggle" onclick="var h=document.documentElement,c=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',c);this.textContent=c==='dark'?'☀':'☽';">☀</button>
+</div>
+
+<div class="wrap">
+  <span class="eyebrow">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6m0 8v6M2 12h6m8 0h6"/><circle cx="12" cy="12" r="3"/></svg>
+    Knowledge Bridge · post-simulation remediation engine
+  </span>
+  <h1>Closing your gaps from Case 14</h1>
+  <p class="lede">This is not your results page — your <b>Station Report</b> covered that. The Knowledge Bridge is a dedicated learning layer: it has analysed that report, isolated the domains where you struggled, and <b>generated reinforcement targeted to each gap</b>. Work through the plan below, then return to a live station to consolidate.</p>
+
+  <div class="sec-h">What we found — gap analysis</div>
+  <div class="gap">
+    <div class="gap-row crit">
+      <div class="gap-name">Safety <span class="pct">critical gap</span><br><span class="flag">CRITICAL-SAFETY FLAG</span></div>
+      <div class="gap-diag">A red-flag presentation (central chest pain, diaphoresis, positive family history) was not escalated — no urgent ECG requested. This triggers a safety bridge regardless of your overall score.
+        <div class="bar"><i style="width:42%;background:var(--danger)"></i></div>
+      </div>
+    </div>
+    <div class="gap-row">
+      <div class="gap-name">Structure &amp; Organisation <span class="pct">52% · below floor</span></div>
+      <div class="gap-diag">History-taking moved back and forth rather than progressing in a clear sequence; no signposting or interim summaries. Below the 50% domain floor, so it routes to reinforcement.
+        <div class="bar"><i style="width:52%;background:var(--warning)"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-h">Your reinforcement plan — generated for these gaps</div>
+  <div class="cards">
+
+    <div class="rc">
+      <div class="rc-top"><span class="rc-type t-case">Mini-case</span><span class="rc-time">~8 min</span></div>
+      <div class="rc-title">ACS under time pressure</div>
+      <div class="rc-target">Targets <b>Safety</b></div>
+      <div class="rc-why">A short interactive case: a patient with the same red-flag profile. You decide what to elicit and order, and see how early escalation changes the outcome — rebuilding the instinct to investigate urgently.</div>
+      <button class="rc-btn">Start mini-case <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+
+    <div class="rc">
+      <div class="rc-top"><span class="rc-type t-mcq">MCQ set</span><span class="rc-time">5 questions</span></div>
+      <div class="rc-title">Red-flag triage in chest pain</div>
+      <div class="rc-target">Targets <b>Safety</b></div>
+      <div class="rc-why">Five single-best-answer questions on recognising and prioritising high-risk chest-pain features, with rationale on each option — reinforcing the discrimination you missed in the station.</div>
+      <button class="rc-btn">Start questions <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+
+    <div class="rc">
+      <div class="rc-top"><span class="rc-type t-pearl">Clinical pearl</span><span class="rc-time">~3 min</span></div>
+      <div class="rc-title">Signpost · summarise · segment</div>
+      <div class="rc-target">Targets <b>Structure &amp; Organisation</b></div>
+      <div class="rc-why">A focused card on the three habits that keep a consultation ordered: announcing what you'll do next, summarising back before moving on, and grouping questions by theme rather than jumping around.</div>
+      <button class="rc-btn">Read pearl <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+
+    <div class="rc">
+      <div class="rc-top"><span class="rc-type t-fw">Framework review</span><span class="rc-time">~4 min</span></div>
+      <div class="rc-title">A structured consultation model</div>
+      <div class="rc-target">Targets <b>Structure &amp; Organisation</b></div>
+      <div class="rc-why">A walk-through of a stage-based consultation framework you can apply in any station — initiating, gathering, explaining, planning, closing — with the cues that signal it's time to move between stages.</div>
+      <button class="rc-btn">Review framework <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <span>This plan is generated by Claude Sonnet&nbsp;4.6 from your performance on this station — not picked from a fixed list. As your weak domains change across attempts, the Bridge regenerates the content it serves you, so remediation always tracks where you currently struggle.</span>
+  </div>
+
+  <div class="return">
+    <div>
+      <div class="t">Then return on a confidence path</div>
+      <div class="d">Once you've worked through the plan, the Bridge does not drop you straight back into the same hard station. It returns you to a lower-tier full station first, so you rebuild the skill in context before being re-tested at level.</div>
+    </div>
+    <a class="btn-primary" href="osce-screen-03-dashboard.html">Resume on confidence path
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</div>
+
+<div class="foot-note">Plexus OSCE Simulator · Knowledge Bridge (remediation engine) · V3</div>
+</body>
+</html>

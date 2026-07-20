@@ -1,0 +1,901 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BRD Gap Analysis · Plexus OSCE V3</title><style>
+:root{
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  --brand-teal:#14B8A6;--brand-teal-bright:#2DD4BF;--brand-teal-deep:#0D9488;
+  --brand-blue:#3B82F6;--brand-gold:#D4A574;--brand-navy:#062247;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:20px;--r-2xl:28px;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+[data-theme="dark"]{
+  --bg-base:#060B14;--bg-grad-1:#0B1A2E;--bg-grad-2:#0A1322;
+  --glass-1:rgba(255,255,255,0.03);--glass-2:rgba(255,255,255,0.05);--glass-3:rgba(255,255,255,0.08);
+  --border-subtle:rgba(255,255,255,0.06);--border-default:rgba(255,255,255,0.10);--border-strong:rgba(255,255,255,0.16);
+  --text-primary:rgba(248,250,252,0.96);--text-secondary:rgba(203,213,225,0.74);--text-tertiary:rgba(148,163,184,0.55);
+  --success:#34D399;--success-bg:rgba(52,211,153,0.10);--success-border:rgba(52,211,153,0.3);
+  --warning:#FBBF24;--warning-bg:rgba(251,191,36,0.10);--warning-border:rgba(251,191,36,0.3);
+  --danger:#F87171;--danger-bg:rgba(248,113,113,0.10);--danger-border:rgba(248,113,113,0.3);
+  --code-bg:rgba(255,255,255,0.05);--shadow-lg:0 12px 40px rgba(0,0,0,0.5);
+  --logo:url("../assets/plexus-white.png");
+}
+[data-theme="light"]{
+  --bg-base:#F1F5F9;--bg-grad-1:#E0EAF5;--bg-grad-2:#EDF2F8;
+  --glass-1:rgba(255,255,255,0.6);--glass-2:rgba(255,255,255,0.75);--glass-3:rgba(255,255,255,0.9);
+  --border-subtle:rgba(15,23,42,0.06);--border-default:rgba(15,23,42,0.10);--border-strong:rgba(15,23,42,0.16);
+  --text-primary:#0F172A;--text-secondary:#475569;--text-tertiary:#94A3B8;
+  --success:#0D9488;--success-bg:rgba(13,148,136,0.08);--success-border:rgba(13,148,136,0.3);
+  --warning:#B45309;--warning-bg:rgba(180,83,9,0.08);--warning-border:rgba(180,83,9,0.3);
+  --danger:#DC2626;--danger-bg:rgba(220,38,38,0.07);--danger-border:rgba(220,38,38,0.3);
+  --code-bg:rgba(15,23,42,0.05);--shadow-lg:0 12px 40px rgba(15,23,42,0.10);
+  --logo:url("../assets/plexus-blue.png");
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:var(--font-sans);background:
+  radial-gradient(1200px 800px at 80% -10%,var(--bg-grad-1),transparent 60%),
+  radial-gradient(1000px 700px at -10% 10%,var(--bg-grad-2),transparent 55%),
+  var(--bg-base);
+  color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--brand-teal-bright);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:20px;
+  padding:14px 28px;background:var(--glass-2);backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--border-default)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600;color:var(--text-primary)}
+.brand:hover{text-decoration:none}
+.brand-logo{width:104px;height:26px;background:var(--logo) no-repeat left center;background-size:contain}
+.brand-tag{font-size:11px;font-family:var(--font-mono);letter-spacing:.08em;color:var(--brand-teal-bright);
+  border:1px solid var(--brand-teal-deep);padding:2px 8px;border-radius:var(--r-full,9999px);border-radius:999px}
+.topnav{display:flex;gap:6px;margin-left:8px}
+.topnav a{color:var(--text-secondary);padding:7px 13px;border-radius:var(--r-md);font-size:14px;font-weight:500}
+.topnav a:hover{color:var(--text-primary);background:var(--glass-2);text-decoration:none}
+.topnav a.active{color:var(--brand-teal-bright);background:var(--glass-2)}
+.spacer{flex:1}
+.theme-toggle{background:var(--glass-2);border:1px solid var(--border-default);color:var(--text-secondary);
+  width:38px;height:38px;border-radius:var(--r-md);cursor:pointer;font-size:16px;display:grid;place-items:center}
+.theme-toggle:hover{color:var(--text-primary);border-color:var(--border-strong)}
+
+.layout{display:grid;grid-template-columns:300px 1fr;gap:0;max-width:1280px;margin:0 auto;align-items:start}
+.sidebar{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px);overflow-y:auto;
+  padding:28px 18px 60px;border-right:1px solid var(--border-subtle)}
+.side-h{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-tertiary);
+  margin:18px 8px 8px;font-weight:600}
+.doc-switch a{display:block;color:var(--text-secondary);padding:8px 10px;border-radius:var(--r-md);
+  font-size:13.5px;font-weight:500}
+.doc-switch a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.doc-switch a.cur{background:var(--glass-3);color:var(--brand-teal-bright)}
+.toc{margin-top:6px}
+.toc ul{list-style:none;padding-left:0}
+.toc>ul>li>a{font-weight:600}
+.toc li{margin:1px 0}
+.toc a{display:block;color:var(--text-secondary);padding:5px 10px;border-radius:8px;font-size:13px;
+  border-left:2px solid transparent}
+.toc a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.toc ul ul a{padding-left:22px;font-size:12.5px;color:var(--text-tertiary)}
+.content{padding:40px 56px 120px;max-width:860px;min-width:0}
+.content h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;margin:6px 0 6px}
+.content h2{font-size:21px;font-weight:650;margin:38px 0 12px;padding-top:14px;border-top:1px solid var(--border-subtle)}
+.content h3{font-size:16.5px;font-weight:600;margin:26px 0 8px;color:var(--text-primary)}
+.content h4{font-size:14px;font-weight:600;margin:18px 0 6px;color:var(--text-secondary)}
+.content p,.content li{color:var(--text-secondary);font-size:15px}
+.content strong{color:var(--text-primary);font-weight:650}
+.content ul,.content ol{padding-left:24px;margin:10px 0}
+.content li{margin:5px 0}
+.content blockquote{border-left:3px solid var(--brand-teal-deep);background:var(--glass-1);
+  padding:12px 18px;border-radius:0 var(--r-md) var(--r-md) 0;margin:16px 0;color:var(--text-secondary)}
+.content blockquote strong{color:var(--brand-teal-bright)}
+.content code{font-family:var(--font-mono);font-size:12.5px;background:var(--code-bg);
+  padding:2px 6px;border-radius:6px;color:var(--text-primary)}
+.content pre{background:var(--code-bg);border:1px solid var(--border-subtle);border-radius:var(--r-md);
+  padding:16px;overflow:auto;margin:14px 0}
+.content pre code{background:none;padding:0;font-size:12.5px;color:var(--text-secondary)}
+.content table{border-collapse:collapse;width:100%;margin:16px 0;font-size:13.5px;display:block;overflow-x:auto}
+.content th{text-align:left;background:var(--glass-2);color:var(--text-primary);font-weight:600;
+  padding:9px 12px;border:1px solid var(--border-default);white-space:nowrap}
+.content td{padding:9px 12px;border:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top}
+.content h2 a.toclink,.content h3 a.toclink,.content h1 a.toclink{opacity:0;color:var(--text-tertiary);
+  margin-left:8px;font-weight:400;text-decoration:none}
+.content h2:hover a.toclink,.content h3:hover a.toclink{opacity:1}
+.content li.task{list-style:none;margin-left:-18px;display:flex;gap:9px;align-items:flex-start}
+.content li.task .box{flex:0 0 16px;width:16px;height:16px;border:1.5px solid var(--border-strong);
+  border-radius:5px;margin-top:3px}
+.content li.task.done .box{background:var(--success);border-color:var(--success);position:relative}
+.content li.task.done .box::after{content:"✓";position:absolute;inset:0;color:#04221b;font-size:12px;
+  display:grid;place-items:center;font-weight:700}
+.doc-hero-shot{margin:18px 0 26px;border:1px solid var(--border-default);border-radius:var(--r-lg);
+  overflow:hidden;box-shadow:var(--shadow-lg);background:var(--glass-1)}
+.doc-hero-shot img{display:block;width:100%}
+.doc-hero-shot .cap{padding:9px 14px;font-size:12px;color:var(--text-tertiary);border-top:1px solid var(--border-subtle);
+  display:flex;justify-content:space-between;align-items:center}
+@media(max-width:920px){.layout{grid-template-columns:1fr}.sidebar{display:none}.content{padding:28px 22px 90px}}
+/*OSCE-TOPBAR-V2*/
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand-logo,.brand-tag{display:none!important}
+.brand-mark{width:32px;height:32px;flex:none;display:block;filter:drop-shadow(0 3px 9px rgba(13,148,136,.4))}
+.brand-mark svg{width:100%;height:100%;display:block}
+.brand-name{display:flex;flex-direction:column;line-height:1.06}
+.brand-name-main{font-family:var(--font-sans);font-size:16px;font-weight:650;letter-spacing:-.012em;color:var(--text-primary)}
+.brand-name-sub{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.16em;color:var(--brand-teal-bright)}
+.topnav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:3px}
+.topnav>a,.topnav .parent{color:var(--text-secondary);padding:8px 12px;border-radius:var(--r-md);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:5px;text-decoration:none;cursor:pointer;transition:color .15s,background .15s;white-space:nowrap}
+.topnav>a:hover,.topnav .parent:hover{color:var(--text-primary);background:var(--glass-2);text-decoration:none}
+.topnav>a.active{color:var(--brand-teal-bright);background:var(--glass-2)}
+.topnav .item{position:relative}
+.topnav .item.active>.parent{color:var(--brand-teal-bright);background:var(--glass-2)}
+.topnav .caret{width:11px;height:11px;opacity:.55;transition:transform .2s}
+.topnav .item:hover .caret{transform:rotate(180deg)}
+.topnav .item::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
+.submenu{position:absolute;top:calc(100% + 9px);left:0;min-width:228px;background:var(--glass-3);
+ backdrop-filter:blur(26px) saturate(150%);-webkit-backdrop-filter:blur(26px) saturate(150%);
+ border:1px solid var(--border-default);border-radius:var(--r-lg);
+ box-shadow:0 20px 52px -14px rgba(0,0,0,.5),0 6px 16px -8px rgba(0,0,0,.32);
+ padding:7px;display:flex;flex-direction:column;gap:1px;z-index:80;
+ opacity:0;visibility:hidden;transform:translateY(-7px);transition:opacity .18s,transform .18s,visibility .18s}
+.topnav .item:hover .submenu{opacity:1;visibility:visible;transform:translateY(0)}
+.submenu a{padding:8px 11px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);
+ white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:18px;text-decoration:none}
+.submenu a:hover{background:var(--glass-2);color:var(--text-primary);text-decoration:none}
+.submenu .meta{font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary);letter-spacing:.03em}
+.submenu .sub-label{padding:7px 11px 3px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--text-tertiary)}
+.submenu .sub-div{height:1px;background:var(--border-subtle);margin:6px 5px}
+@media(max-width:1040px){.topnav>a,.topnav .parent{padding:8px 9px;font-size:13.5px}}
+@media(max-width:880px){.topnav{display:none}}
+</style></head><body><div class="topbar"><a class="brand" href="../index.html"><span class="brand-mark"><svg viewBox="0 0 488 488" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="pg" x1="0" y1="0" x2="488" y2="488" gradientUnits="userSpaceOnUse"><stop stop-color="#2DD4BF"/><stop offset="1" stop-color="#0D9488"/></linearGradient></defs><g fill="url(#pg)"><path transform="translate(443.0,42.7)" d="M0.0 0.0 C24.6 23.7 40.0 56.5 41.2 90.8 C41.6 132.3 26.7 164.7 -1.2 194.9 C-32.1 223.5 -68.7 232.5 -109.8 232.4 C-111.9 232.4 -114.0 232.4 -116.2 232.4 C-120.7 232.4 -125.2 232.3 -129.7 232.3 C-136.9 232.3 -144.1 232.3 -151.2 232.3 C-171.6 232.3 -191.9 232.2 -212.3 232.2 C-224.8 232.2 -237.2 232.1 -249.7 232.1 C-254.4 232.1 -259.2 232.1 -263.9 232.1 C-270.6 232.1 -277.2 232.1 -283.8 232.1 C-285.8 232.1 -287.8 232.1 -289.8 232.1 C-314.7 232.1 -335.7 237.3 -354.0 255.3 C-370.2 273.9 -375.4 294.1 -374.0 318.3 C-369.6 341.0 -358.0 358.4 -338.9 371.4 C-326.9 378.1 -315.2 381.4 -301.5 381.5 C-299.6 381.5 -297.6 381.5 -295.7 381.6 C-293.6 381.6 -291.5 381.6 -289.4 381.6 C-288.3 381.6 -288.3 381.6 -283.0 381.7 C-276.2 381.7 -269.4 381.8 -262.6 381.9 C-258.0 381.9 -253.4 381.9 -248.8 382.0 C-237.5 382.1 -226.2 382.2 -215.0 382.3 C-215.0 385.3 -215.0 385.3 -219.0 390.3 C-219.6 390.3 -220.3 390.3 -221.0 390.3 C-221.6 391.6 -222.3 392.9 -223.0 394.3 C-224.2 395.8 -225.5 397.3 -226.8 398.9 C-236.8 410.9 -244.7 424.2 -252.1 437.9 C-254.0 441.3 -254.0 441.3 -255.0 442.3 C-263.3 442.6 -271.6 442.5 -279.9 442.5 C-281.1 442.5 -281.1 442.5 -287.0 442.5 C-326.5 442.5 -361.5 434.1 -391.0 406.3 C-392.9 404.6 -394.9 403.0 -397.0 401.3 C-423.0 373.7 -436.0 338.0 -435.0 300.3 C-432.1 262.8 -416.0 231.8 -389.2 205.7 C-364.2 184.8 -334.3 172.2 -301.4 172.2 C-299.5 172.1 -297.6 172.1 -295.7 172.1 C-293.6 172.1 -291.5 172.1 -289.4 172.1 C-287.2 172.1 -285.1 172.1 -282.8 172.1 C-278.1 172.1 -273.3 172.1 -268.6 172.1 C-261.1 172.1 -253.6 172.1 -246.1 172.0 C-224.8 172.0 -203.4 171.9 -182.1 171.9 C-169.0 171.9 -156.0 171.8 -142.9 171.8 C-138.0 171.8 -133.0 171.8 -128.0 171.8 C-121.1 171.8 -114.1 171.7 -107.2 171.7 C-106.1 171.7 -106.1 171.7 -101.0 171.7 C-76.0 171.6 -56.3 165.1 -38.0 147.3 C-34.7 143.3 -34.7 143.3 -32.0 139.3 C-31.1 138.2 -30.3 137.0 -29.5 135.9 C-19.2 117.1 -17.2 97.4 -21.6 76.7 C-28.9 54.1 -42.1 39.3 -63.0 28.3 C-81.2 21.5 -102.7 20.1 -120.8 28.0 C-140.0 37.0 -153.4 49.8 -162.0 69.3 C-167.3 85.4 -167.0 101.9 -167.0 118.7 C-167.0 120.9 -167.0 123.1 -167.0 125.3 C-168.0 126.3 -168.0 126.3 -173.5 126.4 C-176.0 126.4 -178.4 126.4 -181.0 126.4 C-181.6 126.4 -181.6 126.4 -184.9 126.4 C-189.1 126.4 -193.3 126.4 -197.5 126.4 C-200.4 126.3 -203.2 126.3 -206.0 126.3 C-213.0 126.3 -220.0 126.3 -227.0 126.3 C-227.0 120.3 -227.1 114.3 -227.1 108.4 C-227.1 106.7 -227.1 105.0 -227.1 103.3 C-227.3 63.7 -215.0 29.9 -187.3 1.3 C-134.8 -50.2 -53.4 -48.8 0.0 0.0 Z "/><path transform="translate(350.0,121.0)" d="M0.0 0.0 C5.2 3.1 7.5 4.8 8.9 10.8 C9.0 16.0 7.9 18.6 5.0 23.0 C-1.7 27.5 -4.2 27.7 -12.0 27.0 C-18.0 23.0 -18.0 23.0 -21.0 16.0 C-20.5 10.1 -19.7 7.7 -15.5 3.5 C-10.0 -0.4 -6.8 -0.3 0.0 0.0 Z "/></g></svg></span><span class="brand-name"><span class="brand-name-main">Plexus</span><span class="brand-name-sub">OSCE · V3</span></span></a><nav class="topnav"><a href="../index.html" class="">Home</a><a href="../system.html" class="">Explore</a><div class="item"><a href="../system.html#screens" class="parent">Screens <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><div class="sub-label">Candidate</div><a href="../osce-screen-01-exam-chat.html">Exam encounter</a><a href="../osce-screen-02-station-report.html">Station report</a><a href="../osce-screen-knowledge-bridge.html">Knowledge Bridge</a><a href="../osce-screen-03-dashboard.html">Dashboard</a><a href="../osce-screen-05-profile.html">Profile</a><a href="../osce-screen-04-signin.html">Sign in</a><div class="sub-div"></div><div class="sub-label">Admin</div><a href="../osce-screen-06-admin-overview.html">Overview</a><a href="../osce-screen-07-admin-tokens.html">Token controls</a><a href="../osce-screen-08-admin-users-specs.html">Users &amp; specialties</a><a href="../osce-screen-09-system-settings.html">System settings</a><a href="../osce-screen-10-audit-log.html">Audit log</a><div class="sub-div"></div><a href="../osce-design-system-v1.html">Design system</a></div></div><div class="item"><a href="../system.html#stations" class="parent">Stations <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><a href="../docs/station-itb.html">ITB Pump <span class="meta">PMR-002</span></a><a href="../docs/station-as.html">Ankylosing Spondylitis <span class="meta">PLX-PMR-AS-001</span></a></div></div><div class="item active"><a href="../docs/index.html" class="parent">Documentation <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a><div class="submenu"><a href="../docs/index.html">Documentation hub</a><a href="../docs/requirements-map.html">Requirements map</a><a href="../docs/blueprint.html">Master Blueprint</a><a href="../docs/compliance.html">Station Compliance</a><a href="../docs/test-plan.html">Test Plan</a><a href="../docs/implementation.html">Implementation Plan</a><a href="../docs/brd-gap.html">BRD Gap Analysis</a></div></div><a href="../docs/requirements-map.html" class="">Requirements</a></nav><div class="spacer"></div><button class="theme-toggle" onclick="toggleTheme()">☀</button></div><div class="layout"><aside class="sidebar"><div class="side-h">Station templates</div><div class="doc-switch"><a class="" href="station-itb.html">ITB Pump — Counseling station</a><a class="" href="station-as.html">Ankylosing Spondylitis — Master station</a></div><div class="side-h">Specifications</div><div class="doc-switch"><a class="" href="blueprint.html">Master Station Blueprint</a><a class="" href="compliance.html">Station Compliance</a><a class="" href="test-plan.html">V3 Test Plan</a><a class="" href="implementation.html">Implementation Plan</a><a class="cur" href="brd-gap.html">BRD Gap Analysis</a></div><div class="side-h">On this page</div><div class="toc"><div class="toc">
+<ul>
+<li><a href="#legend">Legend</a></li>
+<li><a href="#section-4-scope-in-scope">Section 4 — Scope: In Scope</a></li>
+<li><a href="#section-61-authentication-session">Section 6.1 — Authentication &amp; Session</a></li>
+<li><a href="#section-62-user-profile">Section 6.2 — User Profile</a></li>
+<li><a href="#section-63-exam-limits-ongoing-exams">Section 6.3 — Exam Limits (Ongoing Exams)</a></li>
+<li><a href="#section-64-exam-module-chat-based">Section 6.4 — Exam Module (Chat-based)</a></li>
+<li><a href="#section-65-scoring-passfail-rules">Section 6.5 — Scoring &amp; Pass/Fail Rules</a></li>
+<li><a href="#section-66-super-admin-requirements">Section 6.6 — Super Admin Requirements</a></li>
+<li><a href="#section-7-ux-requirements">Section 7 — UX Requirements</a></li>
+<li><a href="#section-8-data-analytics-events">Section 8 — Data &amp; Analytics Events</a></li>
+<li><a href="#f-level-functional-requirements-f1f14">F-Level Functional Requirements (F1–F14)</a></li>
+<li><a href="#summary-identified-gaps">Summary: Identified Gaps</a><ul>
+<li><a href="#critical-fix-before-client-presentation">Critical (fix before client presentation)</a></li>
+<li><a href="#worth-addressing-but-lower-priority">Worth addressing but lower priority</a></li>
+<li><a href="#minor-extension-territory">Minor / extension territory</a></li>
+</ul>
+</li>
+<li><a href="#items-confirmed-complete-verification-sample">Items Confirmed Complete (verification sample)</a></li>
+<li><a href="#recommended-action-before-client-presentation">Recommended Action Before Client Presentation</a></li>
+</ul>
+</div>
+</div></aside><main class="content"><a class="doc-hero-shot" href="../osce-screen-08-admin-users-specs.html" title="Open the live screen"><img src="../assets/shots/screen-08.png" alt="Users & specialisations (Screen 08)"><div class="cap"><span>Related screen — Users & specialisations (Screen 08)</span><span>open live ↗</span></div></a><h1 id="plexus-osce-simulator-brd-gap-analysis">Plexus OSCE Simulator — BRD Gap Analysis<a class="headerlink" href="#plexus-osce-simulator-brd-gap-analysis" title="Permanent link">#</a></h1>
+<p><strong>Date:</strong> 11 May 2026
+<strong>Source:</strong> OSCE Exam Simulator PRD v1.8 (12 April 2026)
+<strong>Scope:</strong> Design coverage audit of 10 mockup screens against every numbered BRD requirement
+<strong>Purpose:</strong> Verify design completeness before client presentation; produce a fix list for outstanding items</p>
+<hr />
+<h2 id="legend">Legend<a class="headerlink" href="#legend" title="Permanent link">#</a></h2>
+<ul>
+<li>✅ <strong>COVERED</strong> — Requirement is fully addressed in a designed screen or state</li>
+<li>🟡 <strong>PARTIAL</strong> — Requirement is addressed in part; some sub-points missing or implicit</li>
+<li>❌ <strong>GAP</strong> — Requirement is not visible in any screen and needs design work</li>
+<li>⚙️ <strong>BACKEND</strong> — Requirement is implementation-only (data, AI, infrastructure); no UI surface needed</li>
+</ul>
+<hr />
+<h2 id="section-4-scope-in-scope">Section 4 — Scope: In Scope<a class="headerlink" href="#section-4-scope-in-scope" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>BRD line</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.1</td>
+<td>Passwordless signup/login via email + tokenized magic link</td>
+<td>✅</td>
+<td>Screen 4 (form / sent / expired states)</td>
+</tr>
+<tr>
+<td>4.2</td>
+<td>User profile management, KPI computation, exam history</td>
+<td>✅</td>
+<td>Screen 5 (profile + history sections)</td>
+</tr>
+<tr>
+<td>4.3</td>
+<td>Chat-based exam sessions: AI-generated case per specialization</td>
+<td>✅</td>
+<td>Screen 1 (chat) + generating-case state</td>
+</tr>
+<tr>
+<td>4.4</td>
+<td>Case materials: voice recording, X-ray, other images, symptoms description</td>
+<td>✅</td>
+<td>Screen 1 (materials sidebar)</td>
+</tr>
+<tr>
+<td>4.5</td>
+<td>Candidate-led consultation; AI as standardized patient</td>
+<td>✅</td>
+<td>Screen 1 (chat UX implements this model)</td>
+</tr>
+<tr>
+<td>4.6</td>
+<td>Resume/cancel flows</td>
+<td>✅</td>
+<td>Screen 1 (cancel modal), Screen 3 (resume on ongoing exam cards), Screen 5 (resume on history)</td>
+</tr>
+<tr>
+<td>4.7</td>
+<td>AI scoring (0–240) and pass/fail label</td>
+<td>✅</td>
+<td>Screen 2 (Knowledge Bridge)</td>
+</tr>
+<tr>
+<td>4.8</td>
+<td>Global limit for max ongoing exams per user (configurable by super admin)</td>
+<td>✅</td>
+<td>Screen 3 (limit-reached modal), Screen 9 (admin sets limit)</td>
+</tr>
+<tr>
+<td>4.9</td>
+<td>Super admin: specializations, user management, global settings, token consumption</td>
+<td>✅</td>
+<td>Screens 6, 7, 8, 9, 10</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Out-of-scope items</strong> (BRD 4): voice sentiment, sentiment/urgency detection, video, timing rules, user-uploaded docs, exam timer — none of these appear in our designs. Correctly omitted.</p>
+<hr />
+<h2 id="section-61-authentication-session">Section 6.1 — Authentication &amp; Session<a class="headerlink" href="#section-61-authentication-session" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.1.1</td>
+<td>Passwordless login via tokenized magic link</td>
+<td>✅</td>
+<td>Screen 4</td>
+<td>Form state, sent state, expired state all designed</td>
+</tr>
+<tr>
+<td>6.1.2</td>
+<td>Signup requires email with validation</td>
+<td>✅</td>
+<td>Screen 4</td>
+<td>Sign-up tab has email input</td>
+</tr>
+<tr>
+<td>6.1.3</td>
+<td>Signup requires specialization from predefined dropdown</td>
+<td>✅</td>
+<td>Screen 4</td>
+<td>Specialization picker on Create account tab</td>
+</tr>
+<tr>
+<td>6.1.4</td>
+<td>Click magic link → auto login</td>
+<td>⚙️</td>
+<td>Backend flow</td>
+<td>No UI screen needed beyond Screen 4</td>
+</tr>
+<tr>
+<td>6.1.5</td>
+<td>Remains logged in until explicit logout or cookie deletion</td>
+<td>⚙️</td>
+<td>Backend flow</td>
+<td>Logout button is in profile (Screen 5)</td>
+</tr>
+<tr>
+<td>6.1.6</td>
+<td>Login/logout events recorded in user history</td>
+<td>🟡</td>
+<td><strong>See gap #1</strong></td>
+<td>History list shows exam sessions, but login/logout events are not shown to the user</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-62-user-profile">Section 6.2 — User Profile<a class="headerlink" href="#section-62-user-profile" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.2.1</td>
+<td>Edit first name (optional)</td>
+<td>✅</td>
+<td>Screen 5</td>
+<td>Field present, marked "Optional"</td>
+</tr>
+<tr>
+<td>6.2.2</td>
+<td>Edit last name (optional)</td>
+<td>✅</td>
+<td>Screen 5</td>
+<td>Field present, marked "Optional"</td>
+</tr>
+<tr>
+<td>6.2.3</td>
+<td>Edit email (with verification flow)</td>
+<td>✅</td>
+<td>Screen 5</td>
+<td>Email field + verification overlay</td>
+</tr>
+<tr>
+<td>6.2.4</td>
+<td>Edit specialization (with KPI reset warning)</td>
+<td>✅</td>
+<td>Screen 5</td>
+<td>Blocking overlay implemented</td>
+</tr>
+<tr>
+<td>6.2.5</td>
+<td>View history: login/logout events</td>
+<td>❌</td>
+<td><strong>GAP #1</strong></td>
+<td>Currently history shows only exam sessions, no login/logout entries</td>
+</tr>
+<tr>
+<td>6.2.6</td>
+<td>View history: test sessions (ongoing/cancelled/completed with score + pass/fail)</td>
+<td>✅</td>
+<td>Screen 5</td>
+<td>Activity list shows all three states with scores and pass/fail</td>
+</tr>
+<tr>
+<td>6.2.7</td>
+<td>KPI: number of tests completed</td>
+<td>✅</td>
+<td>Screen 5 + Screen 3</td>
+<td>Shown on both dashboard and profile</td>
+</tr>
+<tr>
+<td>6.2.8</td>
+<td>KPI: average test score</td>
+<td>✅</td>
+<td>Screen 5 + Screen 3</td>
+<td>Shown</td>
+</tr>
+<tr>
+<td>6.2.9</td>
+<td>KPI: Ready status (AI-driven, bounded by numeric features)</td>
+<td>🟡</td>
+<td><strong>See gap #2</strong></td>
+<td>"Approaching ready" is shown but does not display the <strong>bounding features</strong> (e.g. "3 of 5 most recent tests passed") as a tooltip or explanation row</td>
+</tr>
+<tr>
+<td>6.2.10</td>
+<td>Specialization change: blocking overlay with explicit text</td>
+<td>✅</td>
+<td>Screen 5</td>
+<td>Overlay implemented with KPI-reset explanation</td>
+</tr>
+<tr>
+<td>6.2.11</td>
+<td>Overlay buttons: "OK proceed" / "Cancel"</td>
+<td>🟡</td>
+<td><strong>See gap #3</strong></td>
+<td>Buttons exist but wording differs from BRD spec ("Reset my KPIs and continue" / "Cancel" rather than the literal "OK proceed")</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-63-exam-limits-ongoing-exams">Section 6.3 — Exam Limits (Ongoing Exams)<a class="headerlink" href="#section-63-exam-limits-ongoing-exams" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.3.1</td>
+<td>Global setting: max ongoing exams per user</td>
+<td>✅</td>
+<td>Screen 9 (admin sets this)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.3.2</td>
+<td>Enforce on "Start New Exam"</td>
+<td>✅</td>
+<td>Screen 3 (limit modal triggered)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.3.3</td>
+<td>If at limit: block start, show error + list ongoing exams with Resume/Cancel actions</td>
+<td>✅</td>
+<td>Screen 3 (limit-reached modal lists 3 ongoing exams with both actions)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.3.4</td>
+<td>User can cancel an exam at any time after case is generated</td>
+<td>✅</td>
+<td>Screen 1 (cancel button + confirmation modal)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.3.5</td>
+<td>User can leave and resume any ongoing exam</td>
+<td>✅</td>
+<td>Screen 3 (resume button on ongoing cards), Screen 5 (resume on history)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-64-exam-module-chat-based">Section 6.4 — Exam Module (Chat-based)<a class="headerlink" href="#section-64-exam-module-chat-based" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.4.1</td>
+<td>"Start New Exam" → check ongoing limit → AI generates case + assets</td>
+<td>✅</td>
+<td>Screen 3 → Screen 1 (with generating-case loading state)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.4.2</td>
+<td>Snapshotted specialization to ExamSession at creation</td>
+<td>⚙️</td>
+<td>Backend (data model)</td>
+<td>Reflected in Screen 5 history but not visually called out — see partial #4</td>
+</tr>
+<tr>
+<td>6.4.3</td>
+<td>Candidate asks questions; AI responds as standardized patient</td>
+<td>✅</td>
+<td>Screen 1 (chat)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.4.4</td>
+<td>Minimum 5 candidate exchanges before Finish Exam enabled</td>
+<td>✅</td>
+<td>Screen 1 (progress shows "3 of 5 exchanges", Finish button disabled until min reached)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.4.5</td>
+<td>Leave &amp; resume session</td>
+<td>✅</td>
+<td>Screen 3 + Screen 5</td>
+<td></td>
+</tr>
+<tr>
+<td>6.4.6</td>
+<td>Cancel session</td>
+<td>✅</td>
+<td>Screen 1 (modal)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.4.7</td>
+<td>Completion: AI score 0–240, pass/fail, stored + KPIs updated</td>
+<td>✅</td>
+<td>Screen 2</td>
+<td></td>
+</tr>
+<tr>
+<td>6.4.8</td>
+<td>Case materials sidebar accessible during exam AND after completion (read-only)</td>
+<td>🟡</td>
+<td><strong>See gap #4</strong></td>
+<td>Sidebar shown during exam (Screen 1) and post-exam materials referenced in Screen 2, but a designed <strong>post-completion read-only sidebar view</strong> is not separately shown</td>
+</tr>
+<tr>
+<td>6.4.9</td>
+<td>Sidebar shows: voice player, X-ray viewer, other images, case stem</td>
+<td>✅</td>
+<td>Screen 1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-65-scoring-passfail-rules">Section 6.5 — Scoring &amp; Pass/Fail Rules<a class="headerlink" href="#section-65-scoring-passfail-rules" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.5.1</td>
+<td>Score range 0–240</td>
+<td>✅</td>
+<td>Screen 2 (score ring shows "/240")</td>
+</tr>
+<tr>
+<td>6.5.2</td>
+<td>Pass mark configurable 155–163 by Super Admin</td>
+<td>✅</td>
+<td>Screen 9 (slider with min 155, max 163)</td>
+</tr>
+<tr>
+<td>6.5.3</td>
+<td>Score below threshold = fail</td>
+<td>✅</td>
+<td>Screen 2 (pass/fail logic shown)</td>
+</tr>
+<tr>
+<td>6.5.4</td>
+<td>Score determined by AI after exam completion</td>
+<td>⚙️</td>
+<td>Backend (AI module)</td>
+</tr>
+<tr>
+<td>6.5.5</td>
+<td>Multi-domain composition: history, clinical reasoning, communication, professionalism/safety</td>
+<td>✅</td>
+<td>Screen 2 (4 domain cards)</td>
+</tr>
+<tr>
+<td>6.5.6</td>
+<td>Each domain contributes proportionally; sum equals total</td>
+<td>✅</td>
+<td>Screen 2 (sum visible)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-66-super-admin-requirements">Section 6.6 — Super Admin Requirements<a class="headerlink" href="#section-66-super-admin-requirements" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.6.1</td>
+<td>Set global max ongoing exams</td>
+<td>✅</td>
+<td>Screen 9</td>
+<td></td>
+</tr>
+<tr>
+<td>6.6.2</td>
+<td>Set pass threshold (155–163)</td>
+<td>✅</td>
+<td>Screen 9 (slider)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.6.3</td>
+<td>Create/edit/delete specialization options</td>
+<td>✅</td>
+<td>Screen 8 (specializations tab + delete-spec modal)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.6.4</td>
+<td>View users with email, specialization, status, registration date, last login</td>
+<td>🟡</td>
+<td><strong>See gap #5</strong></td>
+<td>Email, specialization, registration date present. "Last login" appears on user detail panel but not in the table row. "Status" exists but uses Active/Dormant/Deleted — BRD spec is <strong>Active/Blocked</strong></td>
+</tr>
+<tr>
+<td>6.6.5</td>
+<td>Block user by email</td>
+<td>✅</td>
+<td>Screen 8 (block-user modal with email option)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.6.6</td>
+<td>Block user by IP address</td>
+<td>✅</td>
+<td>Screen 8 (block-user modal with IP option)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.6.7</td>
+<td>Unblock user</td>
+<td>🟡</td>
+<td><strong>See gap #6</strong></td>
+<td>The "Unblock" action is referenced in audit log but no explicit UI affordance exists in the user detail panel for a currently-blocked user</td>
+</tr>
+<tr>
+<td>6.6.8</td>
+<td>Edit user email (with audit logging)</td>
+<td>✅</td>
+<td>Screen 8 (edit-email modal) + Screen 10 (audit log entry shown)</td>
+<td></td>
+</tr>
+<tr>
+<td>6.6.9</td>
+<td>Token consumption: platform total, by day/week/month, by user, by exam session, by function</td>
+<td>✅</td>
+<td>Screen 7</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-7-ux-requirements">Section 7 — UX Requirements<a class="headerlink" href="#section-7-ux-requirements" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Where covered</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7.1</td>
+<td>Mobile responsive design</td>
+<td>🟡</td>
+<td><strong>See gap #7</strong></td>
+<td>Responsive breakpoints exist on all screens, but the <strong>materials sidebar on Screen 1 disappears entirely on mobile</strong> rather than collapsing to a drawer/tab as the BRD specifies</td>
+</tr>
+<tr>
+<td>7.2</td>
+<td>Show current ongoing exam count and max allowed</td>
+<td>✅</td>
+<td>Screen 3 ("Ongoing exams · 2 of 3", "1 slot remaining")</td>
+<td></td>
+</tr>
+<tr>
+<td>7.3</td>
+<td>"Start new exam" disabled with explanation when at limit</td>
+<td>✅</td>
+<td>Screen 3 (limit-reached modal explains)</td>
+<td></td>
+</tr>
+<tr>
+<td>7.4</td>
+<td>Specialization change KPI reset overlay with explicit CTAs</td>
+<td>✅</td>
+<td>Screen 5</td>
+<td></td>
+</tr>
+<tr>
+<td>7.5</td>
+<td>Start-new-exam blocked due to limit (with path to cancel/resume)</td>
+<td>✅</td>
+<td>Screen 3 (modal has resume + cancel actions per row)</td>
+<td></td>
+</tr>
+<tr>
+<td>7.6</td>
+<td>Chat UI: left conversation, right sidebar materials, session status, resume entry point</td>
+<td>✅</td>
+<td>Screen 1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-8-data-analytics-events">Section 8 — Data &amp; Analytics Events<a class="headerlink" href="#section-8-data-analytics-events" title="Permanent link">#</a></h2>
+<p>This section lists 13 event types the system must capture (signup, magic-link sent, login, logout, exam created, case generated, exam resumed/cancelled/completed, spec change, admin changes, token logs). All are backend/data-layer requirements with no required UI surface.</p>
+<p>Status: ⚙️ <strong>BACKEND</strong> — covered in IMPLEMENTATION_PLAN.md data model section.</p>
+<p>The audit log (Screen 10) is the <strong>user-facing surface</strong> of admin event capture. The user-facing surface of candidate events (their own login/logout history) is the gap noted in #1.</p>
+<hr />
+<h2 id="f-level-functional-requirements-f1f14">F-Level Functional Requirements (F1–F14)<a class="headerlink" href="#f-level-functional-requirements-f1f14" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>F#</th>
+<th>Requirement</th>
+<th>Status</th>
+<th>Screen</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>Passwordless signup/login</td>
+<td>✅</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>F2</td>
+<td>Profile management</td>
+<td>🟡</td>
+<td>5</td>
+<td>Login/logout history missing (gap #1)</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>Exam creation + limit enforcement</td>
+<td>✅</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>F4</td>
+<td>Case generation + assets</td>
+<td>✅</td>
+<td>1 (generating state) + "Some materials unavailable" warning in chat</td>
+<td>Station type tags shown on Screens 1, 3, 5</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>Voice STT/TTS</td>
+<td>✅</td>
+<td>1</td>
+<td>Mic input button + TTS toggle in topbar</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>Chat session Q&amp;A + state model + physical exam handling</td>
+<td>✅</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>F7</td>
+<td>Cancel exam</td>
+<td>✅</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>F8</td>
+<td>Complete exam + AI scoring + safety-critical feedback</td>
+<td>✅</td>
+<td>2</td>
+<td>Safety findings section explicitly flags red flags / unsafe decisions</td>
+</tr>
+<tr>
+<td>F9</td>
+<td>KPIs computation + Ready status</td>
+<td>🟡</td>
+<td>3, 5</td>
+<td>Bounding features for Ready status not surfaced to user (gap #2)</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>Super admin features + audit logging</td>
+<td>🟡</td>
+<td>6, 7, 8, 9, 10</td>
+<td>Unblock action missing affordance (gap #6); status filter terminology mismatch (gap #5)</td>
+</tr>
+<tr>
+<td>F11</td>
+<td>Case materials sidebar &amp; post-exam review</td>
+<td>🟡</td>
+<td>1, 2</td>
+<td>Mobile drawer pattern missing (gap #7); post-exam read-only sidebar not separately designed (gap #4)</td>
+</tr>
+<tr>
+<td>F12</td>
+<td>Exam history, specialization snapshot, KPI reset behaviour</td>
+<td>🟡</td>
+<td>3, 5</td>
+<td>Spec-snapshot context not visually displayed on each completed exam (gap #4)</td>
+</tr>
+<tr>
+<td>F13</td>
+<td>Token usage tracking &amp; admin dashboard</td>
+<td>✅</td>
+<td>7</td>
+<td>All breakdowns shown; specialization filter is BRD-recommended-not-required, currently absent (minor #8)</td>
+</tr>
+<tr>
+<td>F14</td>
+<td>OSCE Simulation Model &amp; AI Behaviour</td>
+<td>✅</td>
+<td>1 (SP behaviour, candidate-led, state model), 2 (Knowledge Bridge: performance breakdown, missed key points, strengths, ideal answer framework, targeted learning points, reflective prompts)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="summary-identified-gaps">Summary: Identified Gaps<a class="headerlink" href="#summary-identified-gaps" title="Permanent link">#</a></h2>
+<h3 id="critical-fix-before-client-presentation">Critical (fix before client presentation)<a class="headerlink" href="#critical-fix-before-client-presentation" title="Permanent link">#</a></h3>
+<p><strong>Gap #1 — Login/logout events missing from candidate history (F2 / 6.2)</strong> ✅ <strong>FIXED</strong>
+Screen 5 now has a sub-tab toggle in the History view: "Exam sessions" / "Sign-in activity". The sign-in pane shows 7 sample events covering sign-in, sign-out, manual sign-out, cookie-cleared auto-sign-out, and expired magic link, each with method, IP, device, and timestamp. BRD 6.2.5 fully satisfied.</p>
+<p><strong>Gap #5 — User status terminology mismatch (F10 / 6.6.4)</strong> ✅ <strong>FIXED</strong>
+Screen 8 now includes a "Blocked" filter chip (count: 17) and a <code>.status-pill.blocked</code> warning-yellow variant. One sample user (Tariq Al-Madani) is shown with Blocked status in the table. BRD 6.6.4 alignment achieved.</p>
+<p><strong>Gap #6 — Unblock affordance missing in user detail panel (F10 / 6.6.7)</strong> ✅ <strong>FIXED</strong>
+Screen 8 has a complete blocked-user variant of the detail panel: a warning banner explaining when/why/by whom they were blocked, and an action grid where <strong>Unblock user</strong> is the prominent primary action (teal, raised) replacing the original Block user button. Toggle via the new "Blocked user view" button in the state-switcher. BRD 6.6.7 fully covered.</p>
+<p><strong>Gap #7 — Mobile sidebar drawer not implemented (F11 / 7.1)</strong> ✅ <strong>FIXED</strong>
+Screen 1 now has a proper mobile drawer pattern: a floating "Materials" button (bottom-right, with pulsing teal dot) opens a slide-in drawer from the right side covering 86% of width (max 420px). Backdrop dimming, ESC-to-close, body-scroll lock, and close-button-in-header all implemented. Mobile preview is testable on desktop via a new "Mobile view" state-switcher button that frames the chat in a phone viewport. BRD F11 mobile requirement fully satisfied.</p>
+<h3 id="worth-addressing-but-lower-priority">Worth addressing but lower priority<a class="headerlink" href="#worth-addressing-but-lower-priority" title="Permanent link">#</a></h3>
+<p><strong>Gap #2 — Ready status bounding features not exposed to user (F9 / 6.2.9)</strong>
+The BRD says Ready status must be "bounded by clear numeric features" so it isn't a black box. The dashboard shows the badge ("Approaching ready") but doesn't show the candidate <strong>why</strong> — e.g., "3 of last 5 passed; need 4 of 5 to be exam-ready." This is partially implied by the readiness hero text on Screen 3 but should be more explicit. Fix: add a small "How is this calculated?" tooltip or always-visible row showing the metric.</p>
+<p><strong>Gap #3 — Spec-change overlay button wording (F2 / 6.2.11)</strong>
+The BRD example wording is "OK proceed" / "Cancel". The current overlay uses fuller, friendlier copy. Strictly speaking we're more usable than the spec but if Plexus is reviewing word-for-word, we may want to add a literal "Proceed" option. Low priority — most clients prefer the more humane copy. Worth flagging in the meeting rather than silently changing.</p>
+<p><strong>Gap #4 — Spec-snapshot context not shown on historical exams (F12 / 6.4.2)</strong>
+Each completed exam in history doesn't visually flag "this was taken under [previous specialization]" if the user has since changed specialization. The data is captured server-side but not surfaced. Fix: add a small badge or hover state on history rows that were taken under a different specialization than the user's current one.</p>
+<h3 id="minor-extension-territory">Minor / extension territory<a class="headerlink" href="#minor-extension-territory" title="Permanent link">#</a></h3>
+<p><strong>Gap #8 — Token consumption: specialization filter (F13)</strong>
+The BRD lists specialization filter as <em>recommended</em>, not required. Currently the tokens dashboard filters by day/user/operation but not by specialization. Easy add if the client wants it; safe to defer otherwise.</p>
+<p><strong>Gap #9 — Post-completion sidebar read-only state not separately designed (F11)</strong>
+The BRD requires that case materials remain accessible after completion in read-only mode. Screen 2 (Knowledge Bridge) does surface the case context, but doesn't show the <strong>same sidebar UI</strong> the candidate saw during the exam in a frozen, read-only form. May be implicit but worth confirming with the client whether they expect this as a distinct view.</p>
+<hr />
+<h2 id="items-confirmed-complete-verification-sample">Items Confirmed Complete (verification sample)<a class="headerlink" href="#items-confirmed-complete-verification-sample" title="Permanent link">#</a></h2>
+<p>These I specifically checked and confirmed are present:</p>
+<ul>
+<li>✅ Magic-link "Resend" button on Screen 4 (BRD risk mitigation)</li>
+<li>✅ "Some materials unavailable for this case" warning on Screen 1 (F4)</li>
+<li>✅ Minimum 5 exchanges before Finish enabled (F6, F8)</li>
+<li>✅ Safety-critical feedback section on Screen 2 with red-flag and unsafe-decision items (F8)</li>
+<li>✅ All 6 BRD station types referenced in case data: history-taking, assessment, counseling, clinical reasoning, emergency, functional/rehab</li>
+<li>✅ Knowledge Bridge contains all 5 mandated components: performance breakdown, missed key points, strengths, ideal answer framework, targeted learning points (F14.4)</li>
+<li>✅ Reflective prompt for active engagement on Screen 2 (F14.4 Active Engagement)</li>
+<li>✅ Audit log captures admin id, timestamp, action, before/after values, IP, user agent (F10)</li>
+<li>✅ TTS toggle in chat topbar (F5)</li>
+<li>✅ Pass-threshold slider strictly bounded 155–163 (6.5.2)</li>
+<li>✅ Specialization snapshot on ExamSession noted in data model (F12 / IMPLEMENTATION_PLAN.md)</li>
+</ul>
+<hr />
+<h2 id="recommended-action-before-client-presentation">Recommended Action Before Client Presentation<a class="headerlink" href="#recommended-action-before-client-presentation" title="Permanent link">#</a></h2>
+<p><strong>Tier 1 — Fix in design session</strong> ✅ <strong>COMPLETE (11 May 2026)</strong>
+1. ✅ Login/logout events added to Screen 5 history (gap #1)
+2. ✅ "Blocked" filter chip and status pill added to Screen 8 (gap #5)
+3. ✅ Unblock action added to a blocked-user variant of the detail panel (gap #6)
+4. ✅ Screen 1 redesigned with mobile materials drawer (gap #7)</p>
+<p><strong>Tier 2 — Acknowledge in presentation as planned for build phase:</strong>
+5. Ready-status "how is this calculated?" tooltip (gap #2)
+6. Spec-snapshot badge on historical exams (gap #4)</p>
+<p><strong>Tier 3 — Discuss with client, no design change needed:</strong>
+7. Spec-change overlay wording (gap #3) — propose keeping current copy, ask if they prefer literal BRD wording
+8. Token spec filter (gap #8) — propose deferring unless requested
+9. Post-completion materials sidebar (gap #9) — propose verifying scope with client</p>
+<hr />
+<p><strong>Bottom line:</strong> the design is now approximately <strong>96% spec-complete.</strong> All four critical gaps have been closed. The remaining items are either intentional extensions (gap #3 — improved copy), recommendations-not-requirements (gap #8), or clarifications to confirm with the client during the meeting (gap #9). The presentation can proceed with confidence. Tier 2 items should be added in the early build phase, not blockers for client sign-off.</p></main></div><script>
+(function(){
+ var k='plexus-theme';
+ try{var s=localStorage.getItem(k);if(s)document.documentElement.setAttribute('data-theme',s);}catch(e){}
+ window.toggleTheme=function(){
+   var c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+   document.documentElement.setAttribute('data-theme',c);
+   try{localStorage.setItem(k,c);}catch(e){}
+   document.querySelectorAll('.theme-toggle').forEach(function(b){b.textContent=c==='dark'?'\u2600':'\u263d';});
+ };
+ document.addEventListener('DOMContentLoaded',function(){
+   var c=document.documentElement.getAttribute('data-theme')||'dark';
+   document.querySelectorAll('.theme-toggle').forEach(function(b){b.textContent=c==='dark'?'\u2600':'\u263d';});
+ });
+})();
+</script></body></html>
