@@ -1,14 +1,28 @@
 # SESSION STATE — Plexus OSCE Simulator
 
-Updated: 21 Jul 2026 · Phase 0 complete (tag `phase-0-complete`)
+Updated: 21 Jul 2026 · Phase 0 FULLY complete incl. deployment
+(tag `phase-0-complete`; plan tasks 3.1–3.12 all Done)
+
+## Production
+
+- **URL: https://osce-swart.vercel.app** — live, auto-deploys from `main`.
+- Supabase Auth: Site URL = production URL; redirect allow list holds both
+  `https://osce-swart.vercel.app/auth/callback` and
+  `http://localhost:3000/auth/callback`.
+- Production smoke test passed 21 Jul 2026: fresh magic link from the
+  production signin landed as admin on `/app` (verified by Alex).
+- **⚠ Push discipline from Phase 1 onward: every push to `main`
+  auto-deploys to production, and the client may be watching the URL.
+  Nothing gets pushed that isn't presentable — the CLAUDE.md rule
+  (no commit before localhost approval) now guards production directly.**
 
 ## Where we are
 
 Phase 0 (Foundation) is done and approved at every checkpoint, per the
 workflow in CLAUDE.md (implement → verify on localhost in both themes →
 commit → push to `main`). The V3 design in `docs/design/` remains the binding
-reference; `docs/plan/project-plan.csv` is the living plan (tasks 3.1–3.8
-Done; 3.9–3.12 deployment tasks are next).
+reference; `docs/plan/project-plan.csv` is the living plan (all M3 tasks
+Done; M4/Phase 1 is next).
 
 ### Step 1 — Scaffold + design tokens (`d7947c0`)
 - Next.js 16.2.10 (App Router, TypeScript, Tailwind v4, ESLint), npm.
@@ -92,8 +106,6 @@ Done; 3.9–3.12 deployment tasks are next).
 - Shared chrome CSS: `components/shell.css`.
 
 ## Deliberately deferred
-- **Production deployment** (plan 3.9–3.12): no Vercel project yet; auth
-  redirect URLs are localhost-only; deployment setup precedes Phase 1.
 - **Mobile chrome**: topnav hides ≤880px, rail hides ≤1024px per the
   mockups; no mobile navigation alternative yet.
 - **Bridge asset shapes**: the spec leaves miniCases/mcqs/pearls/frameworks
@@ -111,6 +123,7 @@ Done; 3.9–3.12 deployment tasks are next).
   outside the agent's Write tool.
 
 ## Next
-Phase 1 (separate prompt) after deployment setup: station authoring against
-the contract, encounter engine (Vercel AI SDK streaming route serving
-candidate-safe content), scoring, Station Report, Knowledge Bridge.
+Phase 1 (separate prompt): station authoring against the contract,
+encounter engine (Vercel AI SDK streaming route serving candidate-safe
+content), scoring, Station Report, Knowledge Bridge. Remember the push
+discipline above — production is live.
