@@ -20,6 +20,8 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --t-fast: 150ms; --t-base: 250ms; --t-slow: 600ms;
+
+  --rail-w: 240px;
 }
 
 :root,
@@ -67,6 +69,8 @@
   --info: #2DD4BF;
   --info-bg: rgba(45, 212, 191, 0.12);
   --info-border: rgba(45, 212, 191, 0.3);
+
+  --rail-bg: rgba(8, 14, 26, 0.65);
 }
 
 [data-theme="light"] {
@@ -113,6 +117,8 @@
   --info: #0D9488;
   --info-bg: rgba(13, 148, 136, 0.08);
   --info-border: rgba(13, 148, 136, 0.25);
+
+  --rail-bg: rgba(255, 255, 255, 0.65);
 }
 
 /* ===========================================================
