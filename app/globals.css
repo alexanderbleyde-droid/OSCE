@@ -26,6 +26,10 @@
 
 :root,
 [data-theme="dark"] {
+  /* Native controls (select popups, scrollbars, date pickers) follow the
+     active theme. */
+  color-scheme: dark;
+
   --bg-base: #060B14;
   --bg-elevated: #0B1322;
   --bg-grad-1: #0B1A2E;
@@ -65,6 +69,7 @@
   --warning-border: rgba(251, 191, 36, 0.3);
   --danger: #F87171;
   --danger-bg: rgba(248, 113, 113, 0.12);
+  --danger-bg-strong: rgba(248, 113, 113, 0.20);
   --danger-border: rgba(248, 113, 113, 0.3);
   --info: #2DD4BF;
   --info-bg: rgba(45, 212, 191, 0.12);
@@ -74,6 +79,8 @@
 }
 
 [data-theme="light"] {
+  color-scheme: light;
+
   --bg-base: #F8FAFC;
   --bg-elevated: #FFFFFF;
   --bg-grad-1: #E0EAF5;
@@ -113,6 +120,7 @@
   --warning-border: rgba(217, 119, 6, 0.25);
   --danger: #DC2626;
   --danger-bg: rgba(220, 38, 38, 0.08);
+  --danger-bg-strong: rgba(220, 38, 38, 0.12);
   --danger-border: rgba(220, 38, 38, 0.25);
   --info: #0D9488;
   --info-bg: rgba(13, 148, 136, 0.08);
@@ -188,6 +196,14 @@ body {
 }
 
 ::selection { background: var(--brand-teal); color: var(--text-on-brand); }
+
+/* Some platforms ignore color-scheme for the <select> option list —
+   pin it to the tokens explicitly (vars flip with the theme). */
+select option,
+select optgroup {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
 
 /* ===========================================================
    SHARED CHROME — theme toggle (V3 nav pattern)

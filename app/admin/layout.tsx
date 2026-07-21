@@ -4,6 +4,7 @@ import { SignOutButton } from "@/components/sign-out-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createClient } from "@/lib/supabase/server";
 import "@/components/shell.css";
+import "@/components/admin-ui.css";
 
 /** Admin shell: V3 screen-06 rail + main. The proxy already gates
  *  /admin/** by role; this check is defense in depth. */

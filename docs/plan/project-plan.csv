@@ -23,7 +23,7 @@ ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depend
 3.10,M3 Phase 0 Foundation,Auth,Production auth redirect configuration,Sign-in links work on production domain,Oxolus,Done,21 Jul 2026,3.9,
 3.11,M3 Phase 0 Foundation,Infrastructure,First production deployment + smoke test,Sign-in and role gating verified on production URL,Alex + Oxolus,Done,21 Jul 2026,3.10,
 3.12,M3 Phase 0 Foundation,Governance,Phase 0 gate review,Session state updated; milestone tagged; go decision for Phase 1,Alex,Done,21 Jul 2026,3.11,Phase 0 gate passed; production verified
-4.1,M4 Phase 1 - Admin,Admin,Station list view,Table with status badges; specialty and status filters; per V3 admin screens,Oxolus,Planned,Jul 2026,3.12,
+4.1,M4 Phase 1 - Admin,Admin,Station list view,Table with status badges; specialty and status filters; per V3 admin screens,Oxolus,Done,22 Jul 2026,3.12,
 4.2,M4 Phase 1 - Admin,Admin,Station form: patient profile + opening statement,Create/edit persists to draft version; validation messages inline,Oxolus,Planned,Jul 2026,4.1,
 4.3,M4 Phase 1 - Admin,Admin,Station form: difficulty tiers (AI Dial),Three tiers with concealment level and description,Oxolus,Planned,Jul 2026,4.2,
 4.4,M4 Phase 1 - Admin,Admin,Station form: withheld facts + disclosure rules,Rule types: direct-question / empathy-triggered / examination; tier-linked,Oxolus,Planned,Jul 2026,4.2,
