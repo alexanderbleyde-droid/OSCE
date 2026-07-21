@@ -1,0 +1,74 @@
+ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depends on,Notes
+1.1,M1 Design & Specification,Design,Concept and V1 screens,Initial screen set agreed as direction,Oxolus,Done,2026,,
+1.2,M1 Design & Specification,Design,V2 update from client feedback,Audience broadened to students/residents/physicians; specialty picker; 0-100% scoring,Oxolus,Done,2026,1.1,Client feedback executed
+1.3,M1 Design & Specification,Specification,Engine behaviours specified (seven pillars),AI Dial tiers; jargon detection; Exam vs Tutor; progressive disclosure; randomised pools; closing/teach-back; per-station scoring,Oxolus,Done,Jun 2026,1.2,
+1.4,M1 Design & Specification,Specification,Station templates integrated,ITB pump (PMR-002) and Ankylosing Spondylitis (PLX-PMR-AS-001) as reference stations,Oxolus,Done,Jun 2026,1.3,
+1.5,M1 Design & Specification,Specification,Knowledge Bridge defined,Post-simulation remediation engine distinct from Station Report; trigger rules fixed,Oxolus,Done,Jun 2026,1.3,
+1.6,M1 Design & Specification,Design,V3 consolidated bundle assembled,Marketing site + all screens + station pages + documentation as navigable HTML,Oxolus,Done,Jun 2026,1.3;1.4;1.5,Generated via build pipeline
+1.7,M1 Design & Specification,Design,Requirements traceability map,Every client requirement mapped to the screen/spec that addresses it with status legend,Oxolus,Done,Jun 2026,1.6,Basis for sign-off
+1.8,M1 Design & Specification,Design,Header/nav redesign,Centered sticky topbar; dropdown submenus; vectorised brand mark; verified both themes,Oxolus,Done,Jul 2026,1.6,
+1.9,M1 Design & Specification,Delivery,Design bundle delivered to client,Runnable local bundle + covering email,Oxolus,Done,Jul 2026,1.7;1.8,
+2.1,M2 Client Approval,Client,Green light to build received,Written approval of V3 design,Client,Done,05 Jul 2026,1.9,
+2.2,M2 Client Approval,Client,Master station build review committed,Honest build-perspective read on master station promised to client,Oxolus,Done,Jul 2026,2.1,Deliver during Phase 1
+2.3,M2 Client Approval,Decision,Station entry format decided,Stations created and enabled dynamically from admin dashboard; no document import pipeline,Oxolus,Done,Jul 2026,2.1,Confirmed to client in writing
+3.1,M3 Phase 0 Foundation,Infrastructure,Repo with specs and design reference,CLAUDE.md; station schema spec; V3 bundle committed as binding reference,Oxolus,Done,20 Jul 2026,2.1,
+3.2,M3 Phase 0 Foundation,Infrastructure,Database created and linked,Region Frankfurt; access via CLI; migrations workflow established,Alex + Oxolus,Done,20 Jul 2026,3.1,
+3.3,M3 Phase 0 Foundation,Frontend,App scaffold + design tokens + theme toggle,All 72 token values match design reference exactly; no-flash theme persistence,Oxolus,Done,20 Jul 2026,3.1,
+3.4,M3 Phase 0 Foundation,Frontend,Brand mark as inline vector,No raster logo; renders clean on both themes,Oxolus,Done,20 Jul 2026,3.3,Fixed after checkpoint review
+3.5,M3 Phase 0 Foundation,Data,Schema + RLS + contracts + smoke tests,Five tables; versioning triggers; enable-guard; 18/18 security checks pass on live DB,Oxolus,Done,21 Jul 2026,3.2,
+3.6,M3 Phase 0 Foundation,Security,Answer-key protection hardening,Station content admin-only; scoring columns server-authored; attempted-station metadata preserved,Oxolus,Done,21 Jul 2026,3.5,Flagged and resolved at checkpoint
+3.7,M3 Phase 0 Foundation,Auth,Passwordless sign-in + roles + route protection,OTP email flow live; candidate bootstrap; admin promoted server-side; /admin gated by profile role,Oxolus,Done,21 Jul 2026,3.5,Verified both themes with real email
+3.8,M3 Phase 0 Foundation,Frontend,App shell (candidate topbar + admin sidebar),All seven routes navigable; active nav state; both themes,Oxolus,Done,21 Jul 2026,3.7,Approved at checkpoint
+3.9,M3 Phase 0 Foundation,Infrastructure,Server project created and repo linked,Auto-deploy from main; env vars set (Database keys; AI key),Alex + Oxolus,Planned,Jul 2026,3.8,
+3.10,M3 Phase 0 Foundation,Auth,Production auth redirect configuration,Sign-in links work on production domain,Oxolus,Planned,Jul 2026,3.9,
+3.11,M3 Phase 0 Foundation,Infrastructure,First production deployment + smoke test,Sign-in and role gating verified on production URL,Alex + Oxolus,Planned,Jul 2026,3.10,
+3.12,M3 Phase 0 Foundation,Governance,Phase 0 gate review,Session state updated; milestone tagged; go decision for Phase 1,Alex,Planned,Jul 2026,3.11,
+4.1,M4 Phase 1 - Admin,Admin,Station list view,Table with status badges; specialty and status filters; per V3 admin screens,Oxolus,Planned,Jul 2026,3.12,
+4.2,M4 Phase 1 - Admin,Admin,Station form: patient profile + opening statement,Create/edit persists to draft version; validation messages inline,Oxolus,Planned,Jul 2026,4.1,
+4.3,M4 Phase 1 - Admin,Admin,Station form: difficulty tiers (AI Dial),Three tiers with concealment level and description,Oxolus,Planned,Jul 2026,4.2,
+4.4,M4 Phase 1 - Admin,Admin,Station form: withheld facts + disclosure rules,Rule types: direct-question / empathy-triggered / examination; tier-linked,Oxolus,Planned,Jul 2026,4.2,
+4.5,M4 Phase 1 - Admin,Admin,Station form: question pool editor,Cannot save enabled without >=1 safety and >=1 lifestyle question; check-in flags,Oxolus,Planned,Jul 2026,4.2,
+4.6,M4 Phase 1 - Admin,Admin,Station form: jargon bank editor,Term + plain analogy pairs,Oxolus,Planned,Jul 2026,4.2,
+4.7,M4 Phase 1 - Admin,Admin,Station form: closing & teach-back requirements,Must-cover list; teach-back mandatory flag,Oxolus,Planned,Jul 2026,4.2,Critical safety item
+4.8,M4 Phase 1 - Admin,Admin,Station form: scoring domains + critical flags,Five domains; weights must sum 100; critical flags list,Oxolus,Planned,Jul 2026,4.2,
+4.9,M4 Phase 1 - Admin,Admin,Station form: Knowledge Bridge assets,Mini-cases; MCQs; pearls; frameworks editors,Oxolus,Planned,Jul 2026,4.2,Shapes finalised in M5
+4.10,M4 Phase 1 - Admin,Admin,Publish gate + lifecycle actions,Draft to enabled blocked until complete; enable/disable/archive with confirmations,Oxolus,Planned,Jul 2026,4.5;4.7;4.8,DB triggers already enforce server-side
+4.11,M4 Phase 1 - Admin,Admin,Station versioning on edit,Editing an enabled station creates a new version; past attempts keep their version,Oxolus,Planned,Jul 2026,4.10,
+4.12,M4 Phase 1 - Admin,Admin,Users & specialties management,Role visibility; training levels; specialty CRUD; per V3 screen 08,Oxolus,Planned,Jul 2026,4.1,
+4.13,M4 Phase 1 - Admin,Admin,System settings screen,Per V3 screen 09,Oxolus,Planned,Aug 2026,4.1,
+4.14,M4 Phase 1 - Admin,Admin,Audit log of admin actions,Station lifecycle and user-management events recorded; per V3 screen 10,Oxolus,Planned,Aug 2026,4.10,
+4.15,M4 Phase 1 - Candidate,Candidate,Candidate stations list,Enabled stations only; filtered by specialty/level; enforced by DB policy not UI,Oxolus,Planned,Jul 2026,3.12,
+4.16,M4 Phase 1 - Candidate,Candidate,Attempt start flow,Server samples 2-3 questions (>=1 safety; >=1 lifestyle) and persists on attempt; refresh cannot re-roll,Oxolus,Planned,Jul 2026,4.15,
+4.17,M4 Phase 1 - Candidate,Candidate,Exam chat interface,Streaming patient responses; per V3 screen 01; both themes,Oxolus,Planned,Jul 2026,4.16,
+4.18,M4 Phase 1 - Candidate,Candidate,Encounter states,Check-ins; closing prompt; end-of-station transition,Oxolus,Planned,Jul 2026,4.17,
+4.19,M4 Phase 1 - Candidate,Candidate,Exam vs Tutor mode selection,Mode stored on attempt; drives engine behaviour,Oxolus,Planned,Jul 2026,4.16,
+4.20,M4 Phase 1 - Engine,Engine,AI proxy route,Streaming; timeout-safe; keys server-side only,Oxolus,Planned,Jul 2026,3.12,
+4.21,M4 Phase 1 - Engine,Engine,Standardised-patient prompt builder,Prompt assembled from station data only; no station logic in code,Oxolus,Planned,Jul 2026,4.20,
+4.22,M4 Phase 1 - Engine,Engine,AI Dial tier behaviour,Concealment scales with tier per spec,Oxolus,Planned,Jul-Aug 2026,4.21,Escalation watch-point
+4.23,M4 Phase 1 - Engine,Engine,Progressive disclosure enforcement,Withheld facts released only per their disclosure rule,Oxolus,Planned,Jul-Aug 2026,4.21,
+4.24,M4 Phase 1 - Engine,Engine,Jargon detection + analogy responses,Escalating counter; analogy bank used in patient replies,Oxolus,Planned,Jul-Aug 2026,4.21,
+4.25,M4 Phase 1 - Engine,Engine,Question pool runtime,Sampled questions asked naturally; check-ins honoured,Oxolus,Planned,Jul-Aug 2026,4.16;4.21,
+4.26,M4 Phase 1 - Engine,Engine,Closing & teach-back enforcement,Station cannot complete without closing + teach-back; recorded for scoring,Oxolus,Planned,Jul-Aug 2026,4.21,Critical safety item
+4.27,M4 Phase 1 - Engine,Engine,Tutor mode Socratic behaviour,Coaching prompts instead of examination; same station data,Oxolus,Planned,Aug 2026,4.22,
+4.28,M4 Phase 1 - Engine,Engine,Transcript persistence,Full encounter stored on attempt; candidate can write transcript but never scores,Oxolus,Planned,Jul-Aug 2026,4.17,
+4.29,M4 Phase 1 - Engine,QA,Engine behaviour test harness,Scripted encounters proving pillars 1-6 against both reference stations,Oxolus,Planned,Aug 2026,4.22-4.26,Gate for M5
+5.1,M5 Phase 2 Scoring & Bridge,Scoring,Scoring pipeline,Transcript to five domain scores 0-100; server-authored; deterministic re-run,Oxolus,Planned,Aug 2026,4.29,Test-first
+5.2,M5 Phase 2 Scoring & Bridge,Scoring,Aggregate + threshold + critical-fail override,65% pass; any critical flag = fail regardless of aggregate,Oxolus,Planned,Aug 2026,5.1,
+5.3,M5 Phase 2 Scoring & Bridge,Candidate,Station report screen,Domain breakdown; pass/fail; critical flags; per V3 screen 02,Oxolus,Planned,Aug 2026,5.2,
+5.4,M5 Phase 2 Scoring & Bridge,Bridge,Bridge trigger evaluation,Any domain <50%; critical fail; construct = 0,Oxolus,Planned,Aug 2026,5.2,
+5.5,M5 Phase 2 Scoring & Bridge,Bridge,Knowledge Bridge remediation flow,Gap analysis to mini-cases; MCQs; pearls; frameworks; confidence return,Oxolus,Planned,Aug 2026,5.4,Distinct from Station Report
+5.6,M5 Phase 2 Scoring & Bridge,Candidate,Dashboard with attempt history,Per V3 screen 03,Oxolus,Planned,Aug 2026,5.3,
+5.7,M5 Phase 2 Scoring & Bridge,Candidate,Profile screen,Per V3 screen 05,Oxolus,Planned,Aug 2026,5.6,
+5.8,M5 Phase 2 Scoring & Bridge,Content,Seed ITB station via admin flow,Entered through real forms; acceptance test of admin build,Alex + Oxolus,Planned,Aug 2026,4.11;5.5,
+5.9,M5 Phase 2 Scoring & Bridge,Content,Seed AS station via admin flow,Entered through real forms,Alex + Oxolus,Planned,Aug 2026,5.8,
+5.10,M5 Phase 2 Scoring & Bridge,QA,End-to-end test,Full encounter to score to bridge on both stations and both modes,Alex + Oxolus,Planned,Aug 2026,5.8;5.9,Gate for M6 client link
+6.1,M6 Deployment & Monitoring,Infrastructure,Production hardening,Error monitoring; env validation; health checks,Oxolus,Planned,Jul-Aug 2026,3.11,
+6.2,M6 Deployment & Monitoring,Client,Monitoring link + walkthrough to client,Production URL shared with what-to-look-at note,Alex,Planned,End Jul 2026,3.11,Client commitment
+6.3,M6 Deployment & Monitoring,Cost,AI runtime cost evaluation,Model mix decision: patient roleplay vs scoring; unit economics per encounter,Alex + consultant,Planned,Jul-Aug 2026,4.20,
+6.4,M6 Deployment & Monitoring,Admin,Token/usage controls,Per V3 screen 07; limits configurable by admin,Oxolus,Planned,Aug 2026,6.3,
+6.5,M6 Deployment & Monitoring,Infrastructure,Backup & recovery policy,Automated DB backups verified restorable,Oxolus,Planned,Aug 2026,3.9,
+7.1,M7 UAT & Handover,Client,UAT script and testing round,Structured scenarios for client testing,Alex + Client,Planned,Aug 2026,5.10;6.2,
+7.2,M7 UAT & Handover,Build,Feedback fix round,Client-reported issues resolved and verified,Oxolus,Planned,Aug-Sep 2026,7.1,
+7.3,M7 UAT & Handover,Decision,Auth method final decision,Magic link kept or replaced with username/password (parked),Alex,Planned,TBD,7.1,Alex to confirm
+7.4,M7 UAT & Handover,Documentation,Handover documentation,Admin guide; station authoring guide; ops runbook,Oxolus,Planned,Sep 2026,7.2,
+7.5,M7 UAT & Handover,Delivery,Go-live,Production release accepted by client,Alex + Client,Planned,TBD,7.2;7.3,

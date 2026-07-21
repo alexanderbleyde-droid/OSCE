@@ -53,6 +53,13 @@ the V3 design, STOP and flag it instead of executing.
 - Exam mode vs Tutor mode (Socratic) are distinct encounter behaviors.
 - English only. No i18n scaffolding (client BRD is explicit).
 
+## Project plan
+`docs/plan/project-plan.csv` is the living project plan: 73 tasks with IDs,
+milestones, dependencies, and acceptance criteria. Rule: whenever a commit
+completes a task from the plan, update that task's Status in the SAME commit.
+Keep edits surgical (plain-text line edits, never a CSV-library rewrite of
+the whole file).
+
 ## Definition of done (every task)
 - Type-checks, lints, and builds cleanly
 - Verified by the user on localhost in dark AND light themes
