@@ -1,0 +1,69 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { ExamChat } from "@/components/exam-chat";
+import { TIER_LABELS } from "@/lib/engine/attempts";
+import { loadEncounterForOwner } from "@/lib/data/encounter";
+
+function initialsFrom(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "SP";
+  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
+  return (parts[0]![0]! + parts[parts.length - 1]![0]!).toUpperCase();
+}
+
+export default async function EncounterPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const encounter = await loadEncounterForOwner(id);
+  if (!encounter) notFound();
+
+  const { content, station, mode, tier, completed, transcript } = encounter;
+  const patientName = content.patient.name;
+
+  return (
+    <>
+      <header className="exam-topbar">
+        <div className="exam-topbar-left">
+          <Link className="back-btn" href="/app/stations">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Stations
+          </Link>
+          <div className="case-id">
+            <span className="case-id-main">{station.title}</span>
+            <span className="case-id-divider" />
+            <span className="case-id-sub">{station.code}</span>
+          </div>
+        </div>
+
+        <div className="exam-topbar-center">
+          <span className={`state-pill ${completed ? "ended" : ""}`}>
+            <span className="state-pill-dot" />
+            {completed ? "Encounter ended" : mode === "exam" ? "Exam · in progress" : "Tutor · in progress"}
+          </span>
+        </div>
+
+        <div className="exam-topbar-right">
+          <span className="case-id-sub" style={{ fontSize: 11 }}>
+            {TIER_LABELS[tier]}
+          </span>
+          <ThemeToggle />
+        </div>
+      </header>
+
+      <ExamChat
+        attemptId={id}
+        patientName={patientName}
+        patientInitials={initialsFrom(patientName)}
+        initialTranscript={transcript}
+        completed={completed}
+      />
+    </>
+  );
+}

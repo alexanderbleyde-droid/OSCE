@@ -67,6 +67,8 @@ export interface Attempt {
   aggregate: number | null;
   critical_failed: boolean;
   bridge_triggered: boolean;
+  /** Server-authored engine state: { tier, sampledQuestionIds }. */
+  engine_config: Json | null;
   created_at: string;
   completed_at: string | null;
 }

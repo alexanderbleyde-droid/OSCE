@@ -42,7 +42,11 @@ export async function updateSession(request: NextRequest) {
   const claims = data?.claims;
 
   const path = request.nextUrl.pathname;
-  const wantsApp = path === "/app" || path.startsWith("/app/");
+  const wantsApp =
+    path === "/app" ||
+    path.startsWith("/app/") ||
+    path === "/encounter" ||
+    path.startsWith("/encounter/");
   const wantsAdmin = path === "/admin" || path.startsWith("/admin/");
   const onSignin = path === "/signin";
 

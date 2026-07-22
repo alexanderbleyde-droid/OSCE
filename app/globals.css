@@ -76,6 +76,10 @@
   --info-border: rgba(45, 212, 191, 0.3);
 
   --rail-bg: rgba(8, 14, 26, 0.65);
+
+  --persona-bg: rgba(139, 92, 246, 0.12);
+  --persona-border: rgba(139, 92, 246, 0.3);
+  --persona-text: #A78BFA;
 }
 
 [data-theme="light"] {
@@ -127,6 +131,10 @@
   --info-border: rgba(13, 148, 136, 0.25);
 
   --rail-bg: rgba(255, 255, 255, 0.65);
+
+  --persona-bg: rgba(124, 58, 237, 0.08);
+  --persona-border: rgba(124, 58, 237, 0.25);
+  --persona-text: #7C3AED;
 }
 
 /* ===========================================================
