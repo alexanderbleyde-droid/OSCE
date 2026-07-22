@@ -110,13 +110,17 @@ export async function startAttemptCore(
     .single();
   if (versionErr) throw new Error(`startAttempt version: ${versionErr.message}`);
 
-  // Resume an incomplete attempt on the same version — starting again must
-  // NEVER re-roll the sampled set.
+  // Resume an incomplete attempt on the same version AND the same mode —
+  // starting again must NEVER re-roll the sampled set. Resume is mode-aware:
+  // an in-flight exam attempt must not be resumed when the candidate chooses
+  // tutor (and vice versa); the two modes coexist as distinct attempts on the
+  // same station, each resumable only by its own mode.
   const { data: existing, error: existingErr } = await admin
     .from("attempts")
     .select("id, engine_config")
     .eq("user_id", input.userId)
     .eq("station_version_id", version.id)
+    .eq("mode", input.mode)
     .is("completed_at", null)
     .order("created_at", { ascending: false })
     .limit(1)

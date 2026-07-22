@@ -73,6 +73,7 @@ export default async function EncounterPage({
 
       <ExamChat
         attemptId={id}
+        mode={mode}
         patientName={patientName}
         patientInitials={initialsFrom(patientName)}
         initialTranscript={transcript}

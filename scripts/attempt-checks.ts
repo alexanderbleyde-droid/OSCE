@@ -171,6 +171,42 @@ async function main(): Promise<void> {
   check("re-start: sampled set identical (no re-roll)",
     JSON.stringify(second.sampledQuestionIds) === JSON.stringify(first.sampledQuestionIds));
 
+  // 3b. cross-mode: resume is MODE-AWARE. Choosing tutor while an exam attempt
+  // is in flight must create a SEPARATE tutor attempt, not resume the exam one.
+  // Each mode then resumes its own attempt, keeping its own (once-rolled) set.
+  const tutorStart = await startAttemptCore(service, {
+    userId, stationId: enabledId, mode: "tutor", profile,
+  });
+  check("cross-mode: tutor request does NOT resume the in-flight exam attempt",
+    !tutorStart.resumed && tutorStart.attemptId !== first.attemptId);
+
+  const tutorResume = await startAttemptCore(service, {
+    userId, stationId: enabledId, mode: "tutor", profile,
+  });
+  check("cross-mode: tutor re-start resumes its OWN attempt, no re-roll",
+    tutorResume.resumed
+      && tutorResume.attemptId === tutorStart.attemptId
+      && JSON.stringify(tutorResume.sampledQuestionIds) === JSON.stringify(tutorStart.sampledQuestionIds));
+
+  const examResumeAgain = await startAttemptCore(service, {
+    userId, stationId: enabledId, mode: "exam", profile,
+  });
+  check("cross-mode: exam re-start still resumes the ORIGINAL exam attempt (per-attempt no re-roll)",
+    examResumeAgain.resumed
+      && examResumeAgain.attemptId === first.attemptId
+      && JSON.stringify(examResumeAgain.sampledQuestionIds) === JSON.stringify(first.sampledQuestionIds));
+
+  const { data: liveRows, error: liveErr } = await service
+    .from("attempts")
+    .select("id, mode")
+    .eq("user_id", userId)
+    .is("completed_at", null);
+  if (liveErr) throw new Error(liveErr.message);
+  const liveModes = (liveRows ?? []).map((r) => r.mode).sort();
+  check("cross-mode: exactly two in-flight attempts coexist (one exam, one tutor)",
+    liveRows?.length === 2 && JSON.stringify(liveModes) === JSON.stringify(["exam", "tutor"]),
+    `rows: ${JSON.stringify(liveRows)}`);
+
   // 4a. draft station denied by the engine
   let draftDenied = false;
   try {
