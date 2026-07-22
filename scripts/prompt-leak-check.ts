@@ -79,9 +79,20 @@ check("includes patient name", haystack.includes("Omar Al-Rashid"));
 check("includes presentation", haystack.includes("Severe generalized spasticity"));
 check("includes persona notes", haystack.includes("hold his son"));
 check("includes active tier-3 concealment framing", haystack.includes("SECRET_TIER3_CONCEALMENT_DESIGN"));
-check("includes withheld facts (SP must know them to gate them)",
-  haystack.includes("died from pump failure") && haystack.includes("self-reduced oral baclofen"));
-check("includes jargon term + analogy", haystack.includes("intrathecal") && haystack.includes("fluid around the spinal cord"));
+// Progressive disclosure: with a COLD transcript (no empathy, no matching
+// direct question), BOTH withheld facts stay locked and must be absent —
+// the model is never handed a fact it hasn't earned.
+check("EXCLUDES locked withheld facts (no trigger yet)",
+  !haystack.includes("died from pump failure") && !haystack.includes("self-reduced oral baclofen"),
+  "a locked withheld fact leaked into the prompt");
+check("notes that information is being held back (no fabrication)",
+  haystack.toLowerCase().includes("holding back") || haystack.toLowerCase().includes("not ready to share"));
+// The patient is told which terms it won't understand, but is NEVER handed
+// the plain-language meaning (or it would recite it and defeat the test).
+check("includes jargon term", haystack.includes("intrathecal"));
+check("EXCLUDES the jargon analogy/meaning from the patient prompt",
+  !haystack.includes("into the fluid around the spinal cord"),
+  "the patient prompt handed the model the plain-language meaning");
 check("includes sampled question text", haystack.includes("pump can just fail") && haystack.includes("travel and fly"));
 check("prior transcript replayed as messages", built.messages.some((m) => m.role === "user" && m.content.includes("Dr Smith")));
 

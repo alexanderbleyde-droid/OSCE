@@ -35,10 +35,13 @@ export function ExamChat({
   const [typing, setTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Pin the scroll container to the bottom on every change — the container's
+  // bottom padding clears the composer, so the latest line stays above it.
+  // Instant (not smooth) so streaming tokens can't outrun the scroll.
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    const el = scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [messages, typing]);
 
   async function send() {
@@ -106,7 +109,7 @@ export function ExamChat({
 
   return (
     <section className="chat-panel">
-      <div className="chat-scroll" ref={scrollRef}>
+      <div className={`chat-scroll ${completed ? "ended" : ""}`} ref={scrollRef}>
         <div className="chat-inner">
           <div className="day-divider">Consultation begins</div>
 
@@ -156,7 +159,6 @@ export function ExamChat({
             </div>
           )}
 
-          <div ref={bottomRef} />
         </div>
       </div>
 

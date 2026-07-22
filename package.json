@@ -10,7 +10,8 @@
     "rls:smoke": "node scripts/rls-smoke.ts",
     "checks:form": "node scripts/form-checks.ts",
     "checks:attempt": "node scripts/attempt-checks.ts",
-    "checks:prompt": "node scripts/prompt-leak-check.ts"
+    "checks:prompt": "node scripts/prompt-leak-check.ts",
+    "checks:engine": "node scripts/engine-checks.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.18",

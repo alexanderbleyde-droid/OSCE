@@ -2,7 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ExamChat } from "@/components/exam-chat";
+import { EncounterFinish } from "@/components/encounter-finish";
 import { TIER_LABELS } from "@/lib/engine/attempts";
+import { computeEngineState } from "@/lib/engine/prompt-builder";
 import { loadEncounterForOwner } from "@/lib/data/encounter";
 
 function initialsFrom(name: string): string {
@@ -24,6 +26,17 @@ export default async function EncounterPage({
   const { content, station, mode, tier, completed, transcript } = encounter;
   const patientName = content.patient.name;
 
+  const { phase } = computeEngineState(content, transcript, completed);
+  const phaseLabel =
+    phase === "ended"
+      ? "Encounter ended"
+      : phase === "closing"
+        ? "Closing"
+        : mode === "exam"
+          ? "Exam · information gathering"
+          : "Tutor · information gathering";
+  const pillClass = phase === "ended" ? "ended" : phase === "closing" ? "closing" : "";
+
   return (
     <>
       <header className="exam-topbar">
@@ -43,9 +56,9 @@ export default async function EncounterPage({
         </div>
 
         <div className="exam-topbar-center">
-          <span className={`state-pill ${completed ? "ended" : ""}`}>
+          <span className={`state-pill ${pillClass}`}>
             <span className="state-pill-dot" />
-            {completed ? "Encounter ended" : mode === "exam" ? "Exam · in progress" : "Tutor · in progress"}
+            {phaseLabel}
           </span>
         </div>
 
@@ -54,6 +67,7 @@ export default async function EncounterPage({
             {TIER_LABELS[tier]}
           </span>
           <ThemeToggle />
+          {!completed && <EncounterFinish attemptId={id} />}
         </div>
       </header>
 

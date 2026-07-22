@@ -41,15 +41,15 @@ ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depend
 4.15,M4 Phase 1 - Candidate,Candidate,Candidate stations list,Enabled stations only; filtered by specialty/level; enforced by DB policy not UI,Oxolus,Done,22 Jul 2026,3.12,
 4.16,M4 Phase 1 - Candidate,Candidate,Attempt start flow,Server samples 2-3 questions (>=1 safety; >=1 lifestyle) and persists on attempt; refresh cannot re-roll,Oxolus,Done,22 Jul 2026,4.15,
 4.17,M4 Phase 1 - Candidate,Candidate,Exam chat interface,Streaming patient responses; per V3 screen 01; both themes,Oxolus,Done,22 Jul 2026,4.16,
-4.18,M4 Phase 1 - Candidate,Candidate,Encounter states,Check-ins; closing prompt; end-of-station transition,Oxolus,Planned,Jul 2026,4.17,
+4.18,M4 Phase 1 - Candidate,Candidate,Encounter states,Check-ins; closing prompt; end-of-station transition,Oxolus,Done,22 Jul 2026,4.17,
 4.19,M4 Phase 1 - Candidate,Candidate,Exam vs Tutor mode selection,Mode stored on attempt; drives engine behaviour,Oxolus,In progress,Jul 2026,4.16,UI landed; tutor behavior pending 4.27
 4.20,M4 Phase 1 - Engine,Engine,AI proxy route,Streaming; timeout-safe; keys server-side only,Oxolus,Done,22 Jul 2026,3.12,
 4.21,M4 Phase 1 - Engine,Engine,Standardised-patient prompt builder,Prompt assembled from station data only; no station logic in code,Oxolus,Done,22 Jul 2026,4.20,
-4.22,M4 Phase 1 - Engine,Engine,AI Dial tier behaviour,Concealment scales with tier per spec,Oxolus,Planned,Jul-Aug 2026,4.21,Escalation watch-point
-4.23,M4 Phase 1 - Engine,Engine,Progressive disclosure enforcement,Withheld facts released only per their disclosure rule,Oxolus,Planned,Jul-Aug 2026,4.21,
-4.24,M4 Phase 1 - Engine,Engine,Jargon detection + analogy responses,Escalating counter; analogy bank used in patient replies,Oxolus,Planned,Jul-Aug 2026,4.21,
-4.25,M4 Phase 1 - Engine,Engine,Question pool runtime,Sampled questions asked naturally; check-ins honoured,Oxolus,Planned,Jul-Aug 2026,4.16;4.21,
-4.26,M4 Phase 1 - Engine,Engine,Closing & teach-back enforcement,Station cannot complete without closing + teach-back; recorded for scoring,Oxolus,Planned,Jul-Aug 2026,4.21,Critical safety item
+4.22,M4 Phase 1 - Engine,Engine,AI Dial tier behaviour,Concealment scales with tier per spec,Oxolus,Done,22 Jul 2026,4.21,Escalation watch-point
+4.23,M4 Phase 1 - Engine,Engine,Progressive disclosure enforcement,Withheld facts released only per their disclosure rule,Oxolus,Done,22 Jul 2026,4.21,
+4.24,M4 Phase 1 - Engine,Engine,Jargon detection + analogy responses,Escalating counter; analogy bank used in patient replies,Oxolus,Done,22 Jul 2026,4.21,
+4.25,M4 Phase 1 - Engine,Engine,Question pool runtime,Sampled questions asked naturally; check-ins honoured,Oxolus,Done,22 Jul 2026,4.16;4.21,
+4.26,M4 Phase 1 - Engine,Engine,Closing & teach-back enforcement,Station cannot complete without closing + teach-back; recorded for scoring,Oxolus,Done,22 Jul 2026,4.21,Critical safety item; silent teach-back fail per ITB S8 (candidate can finish; deficiency recorded)
 4.27,M4 Phase 1 - Engine,Engine,Tutor mode Socratic behaviour,Coaching prompts instead of examination; same station data,Oxolus,Planned,Aug 2026,4.22,
 4.28,M4 Phase 1 - Engine,Engine,Transcript persistence,Full encounter stored on attempt; candidate can write transcript but never scores,Oxolus,Done,22 Jul 2026,4.17,
 4.29,M4 Phase 1 - Engine,QA,Engine behaviour test harness,Scripted encounters proving pillars 1-6 against both reference stations,Oxolus,Planned,Aug 2026,4.22-4.26,Gate for M5
@@ -65,7 +65,7 @@ ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depend
 5.8,M5 Phase 2 Scoring & Bridge,Content,Seed ITB station via admin flow,Entered through real forms; acceptance test of admin build,Alex + Oxolus,Planned,Aug 2026,4.11;5.5,
 5.9,M5 Phase 2 Scoring & Bridge,Content,Seed AS station via admin flow,Entered through real forms,Alex + Oxolus,Planned,Aug 2026,5.8,
 5.10,M5 Phase 2 Scoring & Bridge,QA,End-to-end test,Full encounter to score to bridge on both stations and both modes,Alex + Oxolus,Planned,Aug 2026,5.8;5.9,Gate for M6 client link
-6.1,M6 Deployment & Monitoring,Infrastructure,Production hardening,Error monitoring; env validation; health checks,Oxolus,Planned,Jul-Aug 2026,3.11,
+6.1,M6 Deployment & Monitoring,Infrastructure,Production hardening,Error monitoring; env validation; health checks,Oxolus,Planned,Jul-Aug 2026,3.11,include transactional patient-reply persistence hardening
 6.2,M6 Deployment & Monitoring,Client,Monitoring link + walkthrough to client,Production URL shared with what-to-look-at note,Alex,Planned,End Jul 2026,3.11,Client commitment
 6.3,M6 Deployment & Monitoring,Cost,AI runtime cost evaluation,Model mix decision: patient roleplay vs scoring; unit economics per encounter,Alex + consultant,Planned,Jul-Aug 2026,4.20,
 6.4,M6 Deployment & Monitoring,Admin,Token/usage controls,Per V3 screen 07; limits configurable by admin,Oxolus,Planned,Aug 2026,6.3,

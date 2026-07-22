@@ -60,22 +60,66 @@
 
 .state-pill.ended .state-pill-dot { background: var(--text-tertiary); }
 
+.state-pill.closing {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning);
+}
+.state-pill.closing .state-pill-dot { background: var(--warning); }
+
+/* Finish button (V3 screen-01 btn-finish, enabled variant) */
+.btn-finish {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  background: var(--glass-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: not-allowed;
+  font-family: inherit;
+  transition: all var(--t-base) var(--ease-out);
+}
+
+.btn-finish.enabled {
+  background: linear-gradient(135deg, var(--brand-teal), var(--brand-teal-deep));
+  color: var(--text-on-brand);
+  border-color: var(--brand-teal-deep);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.btn-finish.enabled:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.25);
+}
+
 /* ===== Chat panel ===== */
 .chat-panel {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 60px);
+  flex: 1;
+  min-height: 0;
   position: relative;
 }
 
+/* .chat-scroll is the ONLY scroller. Its bottom padding clears the composer,
+   which overlays the panel bottom, so the last message never hides behind it. */
 .chat-scroll {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: var(--space-8) var(--space-6) var(--space-6);
+  padding: var(--space-8) var(--space-6) 190px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
+/* Ended encounters have only the small "ended" note, not the full composer. */
+.chat-scroll.ended { padding-bottom: var(--space-16); }
 
 .chat-inner {
   width: 100%;
@@ -247,11 +291,16 @@
 
 /* ===== Input footer ===== */
 .input-footer {
-  position: sticky;
+  position: absolute;
+  left: 0;
+  right: 0;
   bottom: 0;
   padding: var(--space-4) var(--space-6) var(--space-5);
   z-index: 10;
+  pointer-events: none;
 }
+
+.input-footer > * { pointer-events: auto; }
 
 [data-theme="dark"] .input-footer {
   background: linear-gradient(to top, rgba(6, 11, 20, 0.95) 30%, rgba(6, 11, 20, 0));

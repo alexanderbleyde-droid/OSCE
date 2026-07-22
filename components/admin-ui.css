@@ -4,118 +4,8 @@
    osce-screen-06-admin-overview.html card language).
    ============================================================ */
 
-/* ===== Buttons ===== */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 9px 16px;
-  background: linear-gradient(135deg, var(--brand-teal), var(--brand-teal-deep));
-  border: 1px solid var(--brand-teal-deep);
-  border-radius: var(--radius-md);
-  color: var(--text-on-brand);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all var(--t-base) var(--ease-out);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15);
-}
-
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20, 184, 166, 0.25); }
-
-.btn-primary:disabled { opacity: 0.55; cursor: default; transform: none; box-shadow: none; }
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 8px 14px;
-  background: var(--glass-2);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all var(--t-fast) var(--ease-out);
-}
-
-.btn-secondary:hover { background: var(--glass-hover); border-color: var(--border-strong); }
-
-.btn-secondary:disabled { opacity: 0.55; cursor: default; }
-
-.btn-danger {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 8px 14px;
-  background: var(--danger-bg);
-  border: 1px solid var(--danger-border);
-  border-radius: var(--radius-md);
-  color: var(--danger);
-  font-size: 12.5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--t-fast) var(--ease-out);
-}
-
-.btn-danger:hover { background: var(--danger-bg-strong); }
-
-.btn-danger:disabled { opacity: 0.55; cursor: default; }
-
-/* Solid danger — for irreversible confirms (V3 screen-08 pattern). */
-.btn-danger-strong {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 9px 16px;
-  background: var(--danger);
-  border: 1px solid var(--danger);
-  border-radius: var(--radius-md);
-  color: white;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--t-base) var(--ease-out);
-}
-
-[data-theme="dark"] .btn-danger-strong { color: #1A0F0F; }
-
-.btn-danger-strong:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(248, 113, 113, 0.3);
-}
-
-[data-theme="light"] .btn-danger-strong:hover {
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
-}
-
-.btn-danger-strong:disabled {
-  opacity: 0.55;
-  cursor: default;
-  transform: none;
-  box-shadow: none;
-}
-
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  color: var(--text-tertiary);
-  font-size: 12.5px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all var(--t-fast) var(--ease-out);
-}
-
-.btn-ghost:hover { color: var(--text-primary); background: var(--glass-1); }
+/* Buttons (.btn-primary/-secondary/-danger/-danger-strong/-ghost) are shared
+   primitives defined in app/globals.css so every route can use them. */
 
 /* ===== Filter bar ===== */
 .filter-bar {
@@ -364,52 +254,8 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ===== Confirm dialog (opaque per save-bar lesson) ===== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(6, 11, 20, 0.6);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-6);
-}
-
-[data-theme="light"] .modal-overlay { background: rgba(15, 23, 42, 0.35); }
-
-.modal-card {
-  width: 100%;
-  max-width: 440px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  box-shadow: var(--shadow-lg);
-}
-
-.modal-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-primary);
-  letter-spacing: -0.01em;
-  margin-bottom: var(--space-2);
-}
-
-.modal-body {
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: var(--space-5);
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-3);
-}
+/* Confirm dialog (.modal-overlay/-card/-title/-body/-actions) is a shared
+   primitive defined in app/globals.css. */
 
 /* ===== Lifecycle bar ===== */
 .lifecycle-bar {

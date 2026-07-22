@@ -65,10 +65,26 @@ export async function POST(
     model: encounterModel(),
     system: built.system,
     messages: built.messages,
+    onError: (event) => {
+      // Model/stream failure — surfaced to the client as a broken stream;
+      // log server-side so the dangling candidate turn is diagnosable.
+      console.error(`encounter stream error (attempt ${id}):`, event.error);
+    },
     onFinish: async ({ text }) => {
       const reply = text.trim();
-      if (reply.length > 0) {
-        await appendTranscriptMessage(id, encounter.userId, "patient", reply);
+      if (reply.length === 0) return;
+      // onFinish runs after the Response is returned, so a throw here would be
+      // unobserved — retry once, then log. The user has seen this reply; we
+      // must persist it or at least record the failure.
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          await appendTranscriptMessage(id, encounter.userId, "patient", reply);
+          return;
+        } catch (err) {
+          if (attempt === 1) {
+            console.error(`failed to persist patient reply (attempt ${id}):`, err);
+          }
+        }
       }
     },
   });

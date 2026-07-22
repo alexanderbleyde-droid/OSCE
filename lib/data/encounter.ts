@@ -92,3 +92,31 @@ export async function appendTranscriptMessage(
   });
   if (error) throw new Error(`appendTranscript: ${error.message}`);
 }
+
+export class AlreadyCompletedError extends Error {
+  constructor() {
+    super("This encounter has already ended");
+    this.name = "AlreadyCompletedError";
+  }
+}
+
+/** Completes the attempt, recording the server-authored end state. */
+export async function completeAttempt(
+  attemptId: string,
+  userId: string,
+  endState: unknown,
+): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin.rpc("complete_attempt", {
+    p_attempt: attemptId,
+    p_user: userId,
+    p_end_state: endState,
+  });
+  if (error) {
+    if (error.message.includes("already_completed")) throw new AlreadyCompletedError();
+    if (error.message.includes("not_owner") || error.message.includes("attempt_not_found")) {
+      throw new Error("Attempt not found");
+    }
+    throw new Error(`completeAttempt: ${error.message}`);
+  }
+}

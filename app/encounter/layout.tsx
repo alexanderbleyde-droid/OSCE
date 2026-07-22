@@ -11,5 +11,7 @@ export default async function EncounterLayout({
   const { data } = await supabase.auth.getClaims();
   if (!data?.claims) redirect("/signin");
 
-  return <div className="flex min-h-screen flex-col">{children}</div>;
+  // Fixed to the viewport so the chat scroll area (not the page) scrolls and
+  // the composer stays anchored.
+  return <div className="flex h-screen flex-col overflow-hidden">{children}</div>;
 }

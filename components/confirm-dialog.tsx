@@ -1,6 +1,11 @@
 "use client";
 
-/** Confirmation dialog for destructive/irreversible lifecycle actions. */
+import { createPortal } from "react-dom";
+
+/** Confirmation dialog for destructive/irreversible actions. Rendered via a
+ *  portal to <body> so the fixed overlay escapes any ancestor that creates a
+ *  containing block (e.g. the encounter topbar's backdrop-filter) and always
+ *  covers the full viewport. Theme still applies (data-theme is on <html>). */
 export function ConfirmDialog({
   open,
   title,
@@ -20,9 +25,11 @@ export function ConfirmDialog({
   onConfirm: () => void;
   onCancel: () => void;
 }) {
-  if (!open) return null;
+  // These dialogs only open via client interaction, so `open` is always false
+  // during SSR — the document guard makes the portal client-only safely.
+  if (!open || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
       className="modal-overlay"
       role="presentation"
@@ -47,6 +54,7 @@ export function ConfirmDialog({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
