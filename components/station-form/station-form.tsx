@@ -42,7 +42,7 @@ const TIERS = [
 type Status =
   | { kind: "idle" }
   | { kind: "saving" }
-  | { kind: "saved"; at: string }
+  | { kind: "saved"; at: string; version: number }
   | { kind: "error"; message: string };
 
 export function StationForm({
@@ -50,12 +50,16 @@ export function StationForm({
   initial,
   stationId,
   version,
+  readOnly = false,
 }: {
   specialties: Specialty[];
   initial: StationFormValues;
   stationId: string | null;
   /** Version being edited — optimistic-concurrency check on save. */
   version: number;
+  /** Read-only presentation (archived stations): every section rendered,
+   *  controls disabled, no save bar. */
+  readOnly?: boolean;
 }) {
   const router = useRouter();
   const [values, setValues] = useState<StationFormValues>(initial);
@@ -64,6 +68,9 @@ export function StationForm({
   // Survives the create -> edit transition: a second Save before navigation
   // completes must UPDATE the just-created draft, never create a duplicate.
   const [savedId, setSavedId] = useState<string | null>(stationId);
+  // The version this editor's next save targets — updated from each save
+  // result (a published station's first edit creates a new version row).
+  const [expectedVersion, setExpectedVersion] = useState(version);
   const [navPending, startNavTransition] = useTransition();
   const bannerRef = useRef<HTMLDivElement>(null);
 
@@ -98,11 +105,13 @@ export function StationForm({
     setErrors({});
     setStatus({ kind: "saving" });
     const wasCreate = savedId === null;
-    const result = await saveStationAction(savedId, version, parsed.data);
+    const result = await saveStationAction(savedId, expectedVersion, parsed.data);
     if (result.ok) {
       setSavedId(result.stationId);
+      setExpectedVersion(result.savedVersion);
       setStatus({
         kind: "saved",
+        version: result.savedVersion,
         at: new Intl.DateTimeFormat("en-GB", {
           hour: "2-digit",
           minute: "2-digit",
@@ -139,13 +148,16 @@ export function StationForm({
 
   return (
     <div>
-      {status.kind === "error" && (
+      {!readOnly && status.kind === "error" && (
         <div className="form-banner-error" role="alert" ref={bannerRef}>
           {status.message}
         </div>
       )}
 
-      <fieldset className="form-fieldset" disabled={busy}>
+      <fieldset
+        className={`form-fieldset ${readOnly ? "read-only" : ""}`}
+        disabled={busy || readOnly}
+      >
       {/* ===== Identity ===== */}
       <SectionCard
         icon={
@@ -476,12 +488,13 @@ export function StationForm({
       />
       </fieldset>
 
-      {/* ===== Save bar ===== */}
+      {/* ===== Save bar (hidden in read-only view) ===== */}
+      {readOnly ? null : (
       <div className="save-bar">
         <span className={`save-bar-status ${status.kind === "saved" ? "ok" : ""}`}>
           {status.kind === "idle" && "Draft saves are explicit — nothing is stored until you save."}
           {status.kind === "saving" && "Saving draft…"}
-          {status.kind === "saved" && `Draft saved at ${status.at}`}
+          {status.kind === "saved" && `Draft v${status.version} saved at ${status.at}`}
           {/* error state: reported once, in the top banner */}
         </span>
         <button
@@ -493,6 +506,7 @@ export function StationForm({
           {busy ? "Saving…" : "Save draft"}
         </button>
       </div>
+      )}
     </div>
   );
 }

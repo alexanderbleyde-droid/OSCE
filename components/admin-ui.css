@@ -65,6 +65,40 @@
 
 .btn-danger:disabled { opacity: 0.55; cursor: default; }
 
+/* Solid danger — for irreversible confirms (V3 screen-08 pattern). */
+.btn-danger-strong {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 9px 16px;
+  background: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-md);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--t-base) var(--ease-out);
+}
+
+[data-theme="dark"] .btn-danger-strong { color: #1A0F0F; }
+
+.btn-danger-strong:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(248, 113, 113, 0.3);
+}
+
+[data-theme="light"] .btn-danger-strong:hover {
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+.btn-danger-strong:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-ghost {
   display: inline-flex;
   align-items: center;
@@ -326,6 +360,106 @@
 
 .table-foot-note {
   font-size: 12px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Confirm dialog (opaque per save-bar lesson) ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(6, 11, 20, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+[data-theme="light"] .modal-overlay { background: rgba(15, 23, 42, 0.35); }
+
+.modal-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-2);
+}
+
+.modal-body {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-5);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* ===== Lifecycle bar ===== */
+.lifecycle-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.lifecycle-note {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+}
+
+.gate-errors {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-5);
+  color: var(--danger);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.gate-errors ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+}
+
+/* ===== Version history ===== */
+.version-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+}
+
+.version-row:last-child { border-bottom: none; }
+
+.version-num {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.version-date {
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
 }

@@ -144,14 +144,6 @@ export class VersionConflictError extends Error {
   }
 }
 
-/** Thrown when a lifecycle transition made the station non-editable here. */
-export class NotDraftError extends Error {
-  constructor() {
-    super("Only draft stations can be edited in this step");
-    this.name = "NotDraftError";
-  }
-}
-
 /** Creates a new draft station (station + v1 + pointer) in ONE transaction
  *  via the create_station_draft RPC — no orphaned rows on partial failure. */
 export async function createStationDraft(
@@ -176,21 +168,38 @@ export async function createStationDraft(
   return data as string;
 }
 
+/** Thrown when acting on an archived (read-only) station. */
+export class ArchivedError extends Error {
+  constructor() {
+    super("Archived stations are read-only");
+    this.name = "ArchivedError";
+  }
+}
+
+/** Thrown on a lifecycle transition the model does not allow. */
+export class InvalidTransitionError extends Error {
+  constructor() {
+    super("That status change is not allowed from the station's current state");
+    this.name = "InvalidTransitionError";
+  }
+}
+
 /**
- * Saves metadata + content for a DRAFT station atomically via the
- * update_station_draft RPC: locks the station row, re-asserts draft status
- * inside the transaction, and rejects saves against a stale version.
+ * Saves metadata + content atomically via the save_station_version RPC.
+ * Draft stations (and existing unpublished draft versions) update in
+ * place; a published station's first edit creates a NEW version row.
+ * Returns the version number that now holds the content.
  */
-export async function updateStationDraft(
+export async function saveStationVersion(
   stationId: string,
   meta: StationMeta,
   content: StationContent,
   expectedVersion: number,
-): Promise<void> {
+): Promise<number> {
   await requireAdmin();
   const admin = createAdminClient();
 
-  const { error } = await admin.rpc("update_station_draft", {
+  const { data, error } = await admin.rpc("save_station_version", {
     p_station: stationId,
     p_code: meta.code,
     p_title: meta.title,
@@ -201,9 +210,68 @@ export async function updateStationDraft(
   });
   if (error) {
     if (error.code === "23505") throw new DuplicateCodeError();
-    if (error.message.includes("station_not_draft")) throw new NotDraftError();
+    if (error.message.includes("station_archived")) throw new ArchivedError();
     if (error.message.includes("version_conflict")) throw new VersionConflictError();
     if (error.message.includes("station_not_found")) throw new Error("Station not found");
-    throw new Error(`updateStationDraft: ${error.message}`);
+    throw new Error(`saveStationVersion: ${error.message}`);
   }
+  return data as number;
+}
+
+/** Lifecycle transition via the set_station_status RPC. Returns the
+ *  station's current_version after the transition. */
+export async function setStationStatus(
+  stationId: string,
+  next: Extract<StationStatus, "enabled" | "disabled" | "archived">,
+): Promise<number | null> {
+  await requireAdmin();
+  const admin = createAdminClient();
+
+  const { data, error } = await admin.rpc("set_station_status", {
+    p_station: stationId,
+    p_next: next,
+  });
+  if (error) {
+    if (error.message.includes("invalid_transition")) throw new InvalidTransitionError();
+    if (error.message.includes("station_not_found")) throw new Error("Station not found");
+    if (error.message.includes("no_version_to_publish"))
+      throw new Error("This station has no version to publish");
+    throw new Error(`setStationStatus: ${error.message}`);
+  }
+  return data as number | null;
+}
+
+/** Fetches one specific version row (e.g. an archived station's current
+ *  published version for the read-only view). */
+export async function getStationVersion(
+  stationId: string,
+  version: number,
+): Promise<StationVersion | null> {
+  await requireAdmin();
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("station_versions")
+    .select("*")
+    .eq("station_id", stationId)
+    .eq("version", version)
+    .maybeSingle();
+  if (error) throw new Error(`getStationVersion: ${error.message}`);
+  return (data as StationVersion) ?? null;
+}
+
+export type StationVersionSummary = Pick<StationVersion, "id" | "version" | "created_at">;
+
+/** Read-only version history, newest first (content omitted — heavy). */
+export async function listStationVersions(
+  stationId: string,
+): Promise<StationVersionSummary[]> {
+  await requireAdmin();
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("station_versions")
+    .select("id, version, created_at")
+    .eq("station_id", stationId)
+    .order("version", { ascending: false });
+  if (error) throw new Error(`listStationVersions: ${error.message}`);
+  return data ?? [];
 }

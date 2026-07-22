@@ -16,6 +16,13 @@
   pointer-events: none;
 }
 
+/* Archived read-only view: full brightness, text stays selectable —
+   controls are still natively disabled by the fieldset. */
+.form-fieldset.read-only:disabled {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .section-card {
   background: var(--glass-2);
   backdrop-filter: var(--glass-blur);

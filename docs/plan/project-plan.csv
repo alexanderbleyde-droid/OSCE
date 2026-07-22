@@ -32,8 +32,8 @@ ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depend
 4.7,M4 Phase 1 - Admin,Admin,Station form: closing & teach-back requirements,Must-cover list; teach-back mandatory flag,Oxolus,Done,22 Jul 2026,4.2,Critical safety item
 4.8,M4 Phase 1 - Admin,Admin,Station form: scoring domains + critical flags,Five domains; weights must sum 100; critical flags list,Oxolus,Done,22 Jul 2026,4.2,
 4.9,M4 Phase 1 - Admin,Admin,Station form: Knowledge Bridge assets,Mini-cases; MCQs; pearls; frameworks editors,Oxolus,Done,22 Jul 2026,4.2,Shapes finalised in M5
-4.10,M4 Phase 1 - Admin,Admin,Publish gate + lifecycle actions,Draft to enabled blocked until complete; enable/disable/archive with confirmations,Oxolus,Planned,Jul 2026,4.5;4.7;4.8,DB triggers already enforce server-side
-4.11,M4 Phase 1 - Admin,Admin,Station versioning on edit,Editing an enabled station creates a new version; past attempts keep their version,Oxolus,Planned,Jul 2026,4.10,
+4.10,M4 Phase 1 - Admin,Admin,Publish gate + lifecycle actions,Draft to enabled blocked until complete; enable/disable/archive with confirmations,Oxolus,Done,22 Jul 2026,4.5;4.7;4.8,DB triggers already enforce server-side
+4.11,M4 Phase 1 - Admin,Admin,Station versioning on edit,Editing an enabled station creates a new version; past attempts keep their version,Oxolus,Done,22 Jul 2026,4.10,Scripted proof: scripts/version-proof.ts
 4.12,M4 Phase 1 - Admin,Admin,Users & specialties management,Role visibility; training levels; specialty CRUD; per V3 screen 08,Oxolus,Planned,Jul 2026,4.1,
 4.13,M4 Phase 1 - Admin,Admin,System settings screen,Per V3 screen 09,Oxolus,Planned,Aug 2026,4.1,
 4.14,M4 Phase 1 - Admin,Admin,Audit log of admin actions,Station lifecycle and user-management events recorded; per V3 screen 10,Oxolus,Planned,Aug 2026,4.10,
@@ -53,6 +53,7 @@ ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depend
 4.28,M4 Phase 1 - Engine,Engine,Transcript persistence,Full encounter stored on attempt; candidate can write transcript but never scores,Oxolus,Planned,Jul-Aug 2026,4.17,
 4.29,M4 Phase 1 - Engine,QA,Engine behaviour test harness,Scripted encounters proving pillars 1-6 against both reference stations,Oxolus,Planned,Aug 2026,4.22-4.26,Gate for M5
 4.30,M4 Phase 1 - Admin,Admin,Concurrent-edit conflict detection (content etag),"Second admin's save against a stale draft is rejected with a clear conflict message, not silently overwritten",Oxolus,Planned,Aug 2026,4.11,Must land before the client receives admin access (UAT at the latest)
+4.31,M4 Phase 1 - Admin,Admin,Version diff view,Edit page can show a field-level comparison between any two versions of a station,Oxolus,Planned,Aug 2026,4.11,Requested by Alex; land before client admin access together with 4.30
 5.1,M5 Phase 2 Scoring & Bridge,Scoring,Scoring pipeline,Transcript to five domain scores 0-100; server-authored; deterministic re-run,Oxolus,Planned,Aug 2026,4.29,Test-first
 5.2,M5 Phase 2 Scoring & Bridge,Scoring,Aggregate + threshold + critical-fail override,65% pass; any critical flag = fail regardless of aggregate,Oxolus,Planned,Aug 2026,5.1,
 5.3,M5 Phase 2 Scoring & Bridge,Candidate,Station report screen,Domain breakdown; pass/fail; critical flags; per V3 screen 02,Oxolus,Planned,Aug 2026,5.2,
