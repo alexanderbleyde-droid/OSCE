@@ -361,6 +361,134 @@
 
 .tag button:hover { background: var(--danger-bg); color: var(--danger); }
 
+/* ===== Input with suffix (V3 screen-09) ===== */
+.input-suffix {
+  display: inline-flex;
+  align-items: stretch;
+  background: var(--glass-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-width: 240px;
+  transition: all var(--t-base) var(--ease-out);
+}
+
+.input-suffix:focus-within {
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+}
+
+.input-suffix.invalid { border-color: var(--danger); }
+
+.input-suffix input {
+  flex: 1;
+  padding: 9px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+}
+
+.input-suffix-label {
+  padding: 9px 12px;
+  background: var(--glass-2);
+  border-left: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+  font-size: 12.5px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* ===== Weight sum indicator ===== */
+.sum-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.sum-pill.ok {
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.sum-pill.bad {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.domain-row {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.domain-row:last-of-type { border-bottom: none; }
+
+.domain-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.domain-name .domain-key {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  text-transform: none;
+  margin-top: 2px;
+}
+
+/* ===== MCQ option rows ===== */
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.option-row + .option-row { margin-top: var(--space-2); }
+
+.option-row .input { flex: 1; }
+
+.option-correct {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.option-correct input[type="radio"] {
+  accent-color: var(--brand-teal);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.option-correct.on { color: var(--success); }
+
 /* ===== Save bar ===== */
 .save-bar {
   position: sticky;

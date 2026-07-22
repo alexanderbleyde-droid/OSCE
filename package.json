@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "rls:smoke": "node scripts/rls-smoke.ts"
+    "rls:smoke": "node scripts/rls-smoke.ts",
+    "checks:form": "node scripts/form-checks.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",

@@ -29,9 +29,9 @@ ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depend
 4.4,M4 Phase 1 - Admin,Admin,Station form: withheld facts + disclosure rules,Rule types: direct-question / empathy-triggered / examination; tier-linked,Oxolus,Done,22 Jul 2026,4.2,
 4.5,M4 Phase 1 - Admin,Admin,Station form: question pool editor,Cannot save enabled without >=1 safety and >=1 lifestyle question; check-in flags,Oxolus,Done,22 Jul 2026,4.2,
 4.6,M4 Phase 1 - Admin,Admin,Station form: jargon bank editor,Term + plain analogy pairs,Oxolus,Done,22 Jul 2026,4.2,
-4.7,M4 Phase 1 - Admin,Admin,Station form: closing & teach-back requirements,Must-cover list; teach-back mandatory flag,Oxolus,Planned,Jul 2026,4.2,Critical safety item
-4.8,M4 Phase 1 - Admin,Admin,Station form: scoring domains + critical flags,Five domains; weights must sum 100; critical flags list,Oxolus,Planned,Jul 2026,4.2,
-4.9,M4 Phase 1 - Admin,Admin,Station form: Knowledge Bridge assets,Mini-cases; MCQs; pearls; frameworks editors,Oxolus,Planned,Jul 2026,4.2,Shapes finalised in M5
+4.7,M4 Phase 1 - Admin,Admin,Station form: closing & teach-back requirements,Must-cover list; teach-back mandatory flag,Oxolus,Done,22 Jul 2026,4.2,Critical safety item
+4.8,M4 Phase 1 - Admin,Admin,Station form: scoring domains + critical flags,Five domains; weights must sum 100; critical flags list,Oxolus,Done,22 Jul 2026,4.2,
+4.9,M4 Phase 1 - Admin,Admin,Station form: Knowledge Bridge assets,Mini-cases; MCQs; pearls; frameworks editors,Oxolus,Done,22 Jul 2026,4.2,Shapes finalised in M5
 4.10,M4 Phase 1 - Admin,Admin,Publish gate + lifecycle actions,Draft to enabled blocked until complete; enable/disable/archive with confirmations,Oxolus,Planned,Jul 2026,4.5;4.7;4.8,DB triggers already enforce server-side
 4.11,M4 Phase 1 - Admin,Admin,Station versioning on edit,Editing an enabled station creates a new version; past attempts keep their version,Oxolus,Planned,Jul 2026,4.10,
 4.12,M4 Phase 1 - Admin,Admin,Users & specialties management,Role visibility; training levels; specialty CRUD; per V3 screen 08,Oxolus,Planned,Jul 2026,4.1,

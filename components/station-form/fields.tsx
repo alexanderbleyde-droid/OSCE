@@ -121,10 +121,12 @@ export function Toggle({
   on,
   onChange,
   label,
+  disabled,
 }: {
   on: boolean;
   onChange: (on: boolean) => void;
   label: string;
+  disabled?: boolean;
 }) {
   return (
     <span className="toggle">
@@ -133,8 +135,11 @@ export function Toggle({
         role="switch"
         aria-checked={on}
         aria-label={label}
+        disabled={disabled}
         className={`toggle-switch ${on ? "on" : ""}`}
-        onClick={() => onChange(!on)}
+        onClick={() => {
+          if (!disabled) onChange(!on);
+        }}
       />
       <span className="toggle-label">{label}</span>
     </span>

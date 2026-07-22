@@ -16,7 +16,10 @@ import {
   zodIssuesToMap,
   type StationFormValues,
 } from "@/lib/contracts/station-meta";
+import { BridgeSection } from "./bridge-section";
+import { ClosingSection } from "./closing-section";
 import { Field, SectionCard, Select, TextArea, TextInput, Toggle } from "./fields";
+import { ScoringSection } from "./scoring-section";
 import { TagEditor } from "./tag-editor";
 
 const LEVELS: TrainingLevel[] = ["student", "resident", "physician"];
@@ -451,6 +454,26 @@ export function StationForm({
           + Add term
         </button>
       </SectionCard>
+
+      <ClosingSection
+        closing={content.closing}
+        onChange={(closing) => setContent({ closing })}
+        err={err}
+      />
+
+      <ScoringSection
+        scoring={content.scoring}
+        onChange={(scoring) => setContent({ scoring })}
+        err={err}
+        onRowsChanged={() => clearSectionErrors("content.scoring.criticalFlags")}
+      />
+
+      <BridgeSection
+        bridge={content.bridge}
+        onChange={(bridge) => setContent({ bridge })}
+        err={err}
+        onRowsChanged={() => clearSectionErrors("content.bridge")}
+      />
       </fieldset>
 
       {/* ===== Save bar ===== */}

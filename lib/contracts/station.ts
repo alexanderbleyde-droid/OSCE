@@ -81,7 +81,11 @@ export const closingSchema = z.object({
 
 export const scoringDomainSchema = z.object({
   key: scoringDomainKeySchema,
-  weight: z.number().int().min(0).max(100),
+  weight: z
+    .number("Enter a weight (0-100)")
+    .int("Whole numbers only")
+    .min(0, "Weight cannot be negative")
+    .max(100, "Weight cannot exceed 100"),
 });
 
 export const criticalFlagSchema = z.object({
@@ -113,7 +117,9 @@ export const bridgeMcqSchema = z.object({
   id: z.string().min(1),
   question: z.string().min(1, "Question is required"),
   options: z.array(z.string().min(1, "Option cannot be empty")).min(2, "At least two options are required"),
-  correctIndex: z.number().int().min(0),
+  /** null = not chosen yet. Drafts may save unset; the enable gate requires
+   *  a valid index. Never auto-assigned — the author must choose. */
+  correctIndex: z.number("Mark the correct answer").int().min(0).nullable(),
   explanation: z.string().min(1, "Explanation is required"),
 });
 
@@ -223,6 +229,21 @@ export const stationEnableSchema = stationContentSchema.superRefine(
         message: "at least one critical flag is required to enable a station",
       });
     }
+    content.bridge.mcqs.forEach((mcq, i) => {
+      if (mcq.correctIndex === null) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["bridge", "mcqs", i, "correctIndex"],
+          message: "Mark the correct answer",
+        });
+      } else if (mcq.correctIndex >= mcq.options.length) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["bridge", "mcqs", i, "correctIndex"],
+          message: "Correct answer must be one of the options",
+        });
+      }
+    });
   },
 );
 
