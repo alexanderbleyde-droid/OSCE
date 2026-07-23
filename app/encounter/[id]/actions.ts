@@ -7,6 +7,7 @@ import {
   completeAttempt,
   loadEncounterForOwner,
 } from "@/lib/data/encounter";
+import { scoreAttempt } from "@/lib/data/scoring";
 
 export type FinishResult =
   | { ok: true }
@@ -33,6 +34,16 @@ export async function finishEncounterAction(
     const endState = buildEndState(closing);
 
     await completeAttempt(attemptId, encounter.userId, endState);
+
+    // Score the finished attempt (pillar 7). Best-effort: the encounter is
+    // already completed, so a scoring failure must not fail the finish — the
+    // report can re-trigger scoring. Awaited so the report is ready on arrival.
+    try {
+      await scoreAttempt(attemptId);
+    } catch (err) {
+      console.error(`scoring failed for attempt ${attemptId}:`, err);
+    }
+
     return { ok: true };
   } catch (err) {
     unstable_rethrow(err);

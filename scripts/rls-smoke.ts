@@ -251,13 +251,18 @@ async function main(): Promise<void> {
   check("candidate cannot UPDATE own scores", !!selfScoreUpdate,
     "scoring columns updatable by candidate!");
 
+  // Transcript writes are server-authored (service-role append RPC). A direct
+  // candidate PATCH must NOT take effect — otherwise a candidate could rewrite
+  // their transcript to evade the deterministic critical-fail facts scoring
+  // derives from it (jargon count, teach-back).
   const { data: transcriptUpdate, error: transcriptErr } = await candidateA.client
     .from("attempts")
-    .update({ transcript: [{ role: "candidate", content: "hello" }] })
+    .update({ transcript: [{ role: "candidate", content: "tampered" }] })
     .eq("id", attemptA.id)
     .select("id");
-  check("candidate CAN update own transcript (positive control)",
-    !transcriptErr && (transcriptUpdate ?? []).length === 1, transcriptErr?.message ?? "");
+  check("candidate cannot directly UPDATE own transcript (server-authored)",
+    !!transcriptErr || (transcriptUpdate ?? []).length === 0,
+    "candidate PATCHed their own transcript directly!");
 
   // --- 5. past-attempt reportability: station METADATA stays visible after
   //        disable; version content stays hidden ---

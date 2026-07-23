@@ -55,10 +55,10 @@ ID,Milestone,Workstream,Task,Deliverable / Acceptance,Owner,Status,Target,Depend
 4.29,M4 Phase 1 - Engine,QA,Engine behaviour test harness,Scripted encounters proving pillars 1-6 against both reference stations,Oxolus,Done,23 Jul 2026,4.22-4.26,Gate for M5; npm run checks:engine 142/142 (ITB + AS)
 4.30,M4 Phase 1 - Admin,Admin,Concurrent-edit conflict detection (content etag),"Second admin's save against a stale draft is rejected with a clear conflict message, not silently overwritten",Oxolus,Planned,Aug 2026,4.11,Must land before the client receives admin access (UAT at the latest)
 4.31,M4 Phase 1 - Admin,Admin,Version diff view,Edit page can show a field-level comparison between any two versions of a station,Oxolus,Planned,Aug 2026,4.11,Requested by Alex; land before client admin access together with 4.30
-5.1,M5 Phase 2 Scoring & Bridge,Scoring,Scoring pipeline,Transcript to five domain scores 0-100; server-authored; deterministic re-run,Oxolus,Planned,Aug 2026,4.29,Test-first
-5.2,M5 Phase 2 Scoring & Bridge,Scoring,Aggregate + threshold + critical-fail override,65% pass; any critical flag = fail regardless of aggregate,Oxolus,Planned,Aug 2026,5.1,
+5.1,M5 Phase 2 Scoring & Bridge,Scoring,Scoring pipeline,Transcript to five domain scores 0-100; server-authored; deterministic re-run,Oxolus,Done,23 Jul 2026,4.29,Test-first; checks:scoring 50/50; versioned score-of-record (attempt_scores)
+5.2,M5 Phase 2 Scoring & Bridge,Scoring,Aggregate + threshold + critical-fail override,65% pass; any critical flag = fail regardless of aggregate,Oxolus,Done,23 Jul 2026,5.1,Critical override + unrounded 65% boundary proven
 5.3,M5 Phase 2 Scoring & Bridge,Candidate,Station report screen,Domain breakdown; pass/fail; critical flags; per V3 screen 02,Oxolus,Planned,Aug 2026,5.2,
-5.4,M5 Phase 2 Scoring & Bridge,Bridge,Bridge trigger evaluation,Any domain <50%; critical fail; construct = 0,Oxolus,Planned,Aug 2026,5.2,
+5.4,M5 Phase 2 Scoring & Bridge,Bridge,Bridge trigger evaluation,Any domain <50%; critical fail; construct = 0,Oxolus,Done,23 Jul 2026,5.2,Each rule tested independently; construct gated to tier>=2
 5.5,M5 Phase 2 Scoring & Bridge,Bridge,Knowledge Bridge remediation flow,Gap analysis to mini-cases; MCQs; pearls; frameworks; confidence return,Oxolus,Planned,Aug 2026,5.4,Distinct from Station Report
 5.6,M5 Phase 2 Scoring & Bridge,Candidate,Dashboard with attempt history,Per V3 screen 03,Oxolus,Planned,Aug 2026,5.3,
 5.7,M5 Phase 2 Scoring & Bridge,Candidate,Profile screen,Per V3 screen 05,Oxolus,Planned,Aug 2026,5.6,

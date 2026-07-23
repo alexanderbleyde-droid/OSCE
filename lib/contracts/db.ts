@@ -67,10 +67,34 @@ export interface Attempt {
   aggregate: number | null;
   critical_failed: boolean;
   bridge_triggered: boolean;
-  /** Server-authored engine state: { tier, sampledQuestionIds }. */
+  /** Server-authored engine state: { tier, sampledQuestionIds, endState }. */
   engine_config: Json | null;
+  /** Server-authored scoring detail (per-domain rationale, triggered flags,
+   *  bridge reasons, construct scores). Written by the score_attempt RPC. */
+  score_detail: Json | null;
+  scored_at: string | null;
+  scoring_model: string | null;
   created_at: string;
   completed_at: string | null;
+}
+
+/**
+ * One versioned scoring run for an attempt (attempt_scores). The first run
+ * (at Finish) is is_of_record; re-scores add non-record versions. The of-record
+ * row is mirrored onto the Attempt's flat scoring columns.
+ */
+export interface AttemptScore {
+  id: string;
+  attempt_id: string;
+  version: number;
+  is_of_record: boolean;
+  domain_scores: DomainScores | null;
+  aggregate: number | null;
+  critical_failed: boolean;
+  bridge_triggered: boolean;
+  score_detail: Json | null;
+  scoring_model: string | null;
+  scored_at: string;
 }
 
 /**
